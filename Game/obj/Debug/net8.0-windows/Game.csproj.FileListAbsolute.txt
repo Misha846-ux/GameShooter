@@ -18,3 +18,4 @@ C:\Users\Миша\source\repos\Game\Game\obj\Debug\net8.0-windows\refint\Game.dl
 C:\Users\Миша\source\repos\Game\Game\obj\Debug\net8.0-windows\Game.pdb
 C:\Users\Миша\source\repos\Game\Game\obj\Debug\net8.0-windows\Game.genruntimeconfig.cache
 C:\Users\Миша\source\repos\Game\Game\obj\Debug\net8.0-windows\ref\Game.dll
+C:\Users\Миша\source\repos\Game\Game\obj\Debug\net8.0-windows\Game.sourcelink.json

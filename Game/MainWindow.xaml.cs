@@ -14,6 +14,7 @@ using System.Windows.Threading;
 using Game;
 using Game.Creatures;
 using Game.Creatures.Players;
+using Game.Creatures.Enemies;
 using Game.Bullets;
 
 namespace Game
@@ -26,7 +27,9 @@ namespace Game
         DispatcherTimer timer = new DispatcherTimer();
 
         Player player;
+        Enemy enemy;
         List<Bullet> bullets;
+        List<Enemy> enemies;
         private void GameLoop(object sender, EventArgs e)
         {
             player.BoardWhidth = (int)Application.Current.MainWindow.Width;
@@ -40,6 +43,10 @@ namespace Game
                 item.BoardHeight = (int)Application.Current.MainWindow.Height;
                 item.BulletMove(MyCanvas);
             }
+            foreach (var item in enemies)
+            {
+                item.Shot(player.GetBody(), bullets, MyCanvas);
+            }
         }
         public MainWindow()
         {
@@ -49,8 +56,10 @@ namespace Game
             timer.Start();
 
             MyCanvas.Focus();
-            player = new Player((int)Application.Current.MainWindow.Width, (int)Application.Current.MainWindow.Height);
             bullets = new List<Bullet>();
+            enemies = new List<Enemy>();
+            enemy = new Enemy(new Point(0,0),MyCanvas,enemies);
+            player = new Player((int)Application.Current.MainWindow.Width, (int)Application.Current.MainWindow.Height);
             MyCanvas.Children.Add(player.GetBody());
         }
         

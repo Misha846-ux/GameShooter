@@ -55,19 +55,19 @@ namespace Game.Bullets
             }
             Canvas.SetLeft(bullet, Canvas.GetLeft(bullet) + nextPosition.X);
             Canvas.SetTop(bullet, Canvas.GetTop(bullet) + nextPosition.Y);
-            if (Canvas.GetLeft(this.bullet) <= 0)
+            if (Canvas.GetLeft(this.bullet) <= -100)
             {
                 MyCanvas.Children.Remove(this.bullet);
             }
-            else if(Canvas.GetLeft(this.bullet) > this.BoardWhidth)
+            else if(Canvas.GetLeft(this.bullet)-100 > this.BoardWhidth)
             {
                 MyCanvas.Children.Remove(this.bullet);
             }
-            else if (Canvas.GetTop(this.bullet) <= 0)
+            else if (Canvas.GetTop(this.bullet) <= -100)
             {
                 MyCanvas.Children.Remove(this.bullet);
             }
-            else if (Canvas.GetTop(this.bullet) > this.BoardHeight)
+            else if (Canvas.GetTop(this.bullet)-100 > this.BoardHeight)
             {
                 MyCanvas.Children.Remove(this.bullet);
             }

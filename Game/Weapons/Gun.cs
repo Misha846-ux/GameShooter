@@ -16,6 +16,7 @@ using Game.Creatures.Players;
 using Game.Bullets;
 namespace Game.Weapons
 {
+
     internal abstract class Gun
     {
         protected int rateOfFireTime; // contains a value indicating the delay between shots
@@ -29,6 +30,10 @@ namespace Game.Weapons
         public int Ammo { get { return this.ammo; } }
         public Point PlayerPosition { get; set; }
 
+        public void FastReload()
+        {
+            ammo = 0;
+        }
         public void GunReload()
         {
             if(this.rateOfFireTimer < this.reloadTime)

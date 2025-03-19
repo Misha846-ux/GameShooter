@@ -32,20 +32,20 @@ namespace Game
         List<Enemy> enemies;
         private void GameLoop(object sender, EventArgs e)
         {
-            player.BoardWhidth = (int)Application.Current.MainWindow.Width;
-            player.BoardHeight = (int)Application.Current.MainWindow.Height;
-            player.ShowInterface(MyCanvas);
-            player.PlayerMove();
-            player.Fire(bullets, MyCanvas);
+            player.BoardWhidth = (int)GameBoard.Width;
+            player.BoardHeight = (int)GameBoard.Height;
+            player.ShowInterface(Interface);
+            player.PlayerMove(GameBoard);
+            player.Fire(bullets, GameBoard);
             foreach (var item in bullets)
             {
-                item.BoardWhidth = (int)Application.Current.MainWindow.Width;
-                item.BoardHeight = (int)Application.Current.MainWindow.Height;
-                item.BulletMove(MyCanvas);
+                item.BoardWhidth = (int)GameBoard.Width;
+                item.BoardHeight = (int)GameBoard.Height;
+                item.BulletMove(GameBoard);
             }
             foreach (var item in enemies)
             {
-                item.Shot(player.GetBody(), bullets, MyCanvas);
+                item.Shot(player.GetBody(), bullets, GameBoard);
             }
         }
         public MainWindow()
@@ -55,12 +55,17 @@ namespace Game
             timer.Tick += GameLoop;
             timer.Start();
 
-            MyCanvas.Focus();
+            GameBoard.Focus();
+            GameBoard.Width = ((int)(System.Windows.SystemParameters.PrimaryScreenWidth * 2) / 10) * 10;
+            GameBoard.Height = ((int)(System.Windows.SystemParameters.PrimaryScreenHeight * 2) / 10) * 10;
+            Canvas.SetLeft(GameBoard, -System.Windows.SystemParameters.PrimaryScreenWidth / 2);
+            Canvas.SetTop(GameBoard, -System.Windows.SystemParameters.PrimaryScreenHeight / 2);
+            Interface.Width = System.Windows.SystemParameters.PrimaryScreenWidth;
+            Interface.Height = System.Windows.SystemParameters.PrimaryScreenHeight;
             bullets = new List<Bullet>();
             enemies = new List<Enemy>();
-            enemy = new Enemy(new Point(0,0),MyCanvas,enemies);
-            player = new Player((int)Application.Current.MainWindow.Width, (int)Application.Current.MainWindow.Height);
-            MyCanvas.Children.Add(player.GetBody());
+            enemy = new Enemy(new Point(0,0), GameBoard, enemies);
+            player = new Player((int)System.Windows.SystemParameters.PrimaryScreenWidth, (int)System.Windows.SystemParameters.PrimaryScreenHeight, GameBoard, Interface);
         }
         
         private void OnKeyDown1(object sender, KeyEventArgs e)
@@ -80,7 +85,7 @@ namespace Game
 
         private void MouseMove(object sender, MouseEventArgs e)
         {
-            player.MousePosition = e.GetPosition(MyCanvas);
+            player.MousePosition = e.GetPosition(GameBoard);
         }
 
         private void OnMouseDown(object sender, MouseButtonEventArgs e)

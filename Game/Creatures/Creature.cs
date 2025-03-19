@@ -16,8 +16,10 @@ using Game.Creatures.Players;
 
 namespace Game.Creatures
 {
+    
     internal abstract class Creature
     {
+        
         protected Rectangle body;
         protected int creatureSpeed;
         public int BoardWhidth {  get; set; }

@@ -14,8 +14,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Game.Creatures.Players;
 using Game.Bullets;
-using Game.Weapons;
-using Game.Weapons.PlayerWeapons;
+using Game.Objects.Weapons;
+using Game.Objects.Weapons.PlayerWeapons;
+using System.Xml.Linq;
 
 namespace Game.Creatures.Players
 {
@@ -34,6 +35,7 @@ namespace Game.Creatures.Players
         public Player(int boardWhidth, int boardHeight, Canvas GameBoard, Canvas Interfase)
         {
             this.body.Fill = new SolidColorBrush(Colors.White);
+            this.body.Name = "player";
             GameBoard.Children.Add(this.body);
             this.BoardWhidth = boardWhidth;
             this.BoardHeight = boardHeight;

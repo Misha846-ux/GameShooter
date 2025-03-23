@@ -33,7 +33,7 @@ namespace Game.Bullets
                 Height = 20,
                 Fill = new SolidColorBrush(Colors.Red)
             };
-            this.bulletSpeed = 10;
+            this.bulletSpeed = 20;
             this.startPosition = startPosition;
             this.mousePosition = mousePosition;
             Canvas.SetLeft(this.bullet, startPosition.X);
@@ -47,6 +47,7 @@ namespace Game.Bullets
 
         public void BulletMove(Canvas MyCanvas)
         {
+            
             Point nextPosition = new Point(this.mousePosition.X - this.startPosition.X, this.mousePosition.Y - this.startPosition.Y);
             while (Math.Abs(nextPosition.X) > this.bulletSpeed || Math.Abs(nextPosition.Y) > this.bulletSpeed)
             {

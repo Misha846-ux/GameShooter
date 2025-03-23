@@ -9,7 +9,7 @@
         WindowStyle="None"
         Title="MainWindow" Height="500" Width="800">
 
-    <Canvas Name="Board" Background="Aqua" KeyDown="OnKeyDown1" KeyUp="OnKeyUp" MouseMove="MouseMove" MouseDown="OnMouseDown"
+    <Canvas Name="Board" Background="Black" KeyDown="OnKeyDown1" KeyUp="OnKeyUp" MouseMove="MouseMove" MouseDown="OnMouseDown"
             MouseUp="OnMouseUp">
         <Canvas Name="GameBoard" Focusable="True" Background="Black" ></Canvas>
         <Canvas Name="Interface"></Canvas>

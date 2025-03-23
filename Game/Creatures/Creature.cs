@@ -29,7 +29,6 @@ namespace Game.Creatures
         {
             body = new Rectangle
             {
-                Name = "player",
                 Width = 50,
                 Height = 50,
             };

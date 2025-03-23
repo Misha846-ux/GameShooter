@@ -16,6 +16,9 @@ using Game.Creatures;
 using Game.Creatures.Players;
 using Game.Creatures.Enemies;
 using Game.Bullets;
+using Game.Objects;
+using Game.Objects.Walls.UnbreakableWalls;
+using Game.Objects.Walls.BreakableWalls;
 
 namespace Game
 {
@@ -56,16 +59,30 @@ namespace Game
             timer.Start();
 
             GameBoard.Focus();
-            GameBoard.Width = ((int)(System.Windows.SystemParameters.PrimaryScreenWidth * 2) / 10) * 10;
-            GameBoard.Height = ((int)(System.Windows.SystemParameters.PrimaryScreenHeight * 2) / 10) * 10;
+            GameBoard.Width = 3070;
+            GameBoard.Height = 1720;
             Canvas.SetLeft(GameBoard, -System.Windows.SystemParameters.PrimaryScreenWidth / 2);
             Canvas.SetTop(GameBoard, -System.Windows.SystemParameters.PrimaryScreenHeight / 2);
+
+            //Adding BackGround for GameBoard
+            {
+                ImageBrush backGroundImage = new ImageBrush();
+                backGroundImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Textures/GrassBackGround.png"));
+                backGroundImage.TileMode = TileMode.Tile;
+                backGroundImage.Viewport = new Rect(0, 0, 0.15, 0.15);
+                backGroundImage.ViewportUnits = BrushMappingMode.RelativeToBoundingBox;
+                GameBoard.Background = backGroundImage;
+            }
+            
             Interface.Width = System.Windows.SystemParameters.PrimaryScreenWidth;
             Interface.Height = System.Windows.SystemParameters.PrimaryScreenHeight;
             bullets = new List<Bullet>();
             enemies = new List<Enemy>();
             enemy = new Enemy(new Point(0,0), GameBoard, enemies);
             player = new Player((int)System.Windows.SystemParameters.PrimaryScreenWidth, (int)System.Windows.SystemParameters.PrimaryScreenHeight, GameBoard, Interface);
+
+            StoneWall stonewall = new StoneWall(new Point(200, 100), GameBoard);
+            WoodenWall woodenWall = new WoodenWall(new Point(200,150), GameBoard);
         }
         
         private void OnKeyDown1(object sender, KeyEventArgs e)

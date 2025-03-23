@@ -14,8 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Game.Creatures.Players;
 using Game.Bullets;
-using Game.Weapons;
-using Game.Weapons.PlayerWeapons;
+using Game.Objects.Weapons;
+using Game.Objects.Weapons.PlayerWeapons;
 
 namespace Game.Creatures.Enemies
 {
@@ -25,6 +25,7 @@ namespace Game.Creatures.Enemies
         public Enemy(Point spawnPoint, Canvas MyCanvas, List<Enemy> enemies)
         {
             this.body.Fill = new SolidColorBrush(Colors.Blue);
+            this.body.Name = "enemy";
             this.creatureSpeed = 10;
             MyCanvas.Children.Add(this.body);
             Canvas.SetLeft(this.body, spawnPoint.X);

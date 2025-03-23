@@ -9,7 +9,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Weapons\EnemieWeapons\" />
+    <None Remove="Resources\Textures\GrassBackGround.png" />
+    <None Remove="Resources\Textures\StoneWall.png" />
+    <None Remove="Resources\Textures\WoodenWall.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Objects\Items\" />
+    <Folder Include="Objects\Other\" />
+    <Folder Include="Objects\Weapons\EnemieWeapons\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Textures\GrassBackGround.png" />
+    <Resource Include="Resources\Textures\StoneWall.png" />
+    <Resource Include="Resources\Textures\WoodenWall.png" />
   </ItemGroup>
 
 </Project>

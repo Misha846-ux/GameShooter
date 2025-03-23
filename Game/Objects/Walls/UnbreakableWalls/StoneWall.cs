@@ -17,8 +17,9 @@ namespace Game.Objects.Walls.UnbreakableWalls
 {
     internal class StoneWall: GameObject
     {
-        public StoneWall(Point position, Canvas GameBoard)
+        public StoneWall(Point position, Canvas GameBoard, List<GameObject> gameObjects)
         {
+            gameObjects.Add(this);
             ImageBrush stoneWallTexture = new ImageBrush();
             stoneWallTexture.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Textures/StoneWall.png"));
             this.body.Fill = stoneWallTexture;

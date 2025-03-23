@@ -19,6 +19,7 @@ using Game.Bullets;
 using Game.Objects;
 using Game.Objects.Walls.UnbreakableWalls;
 using Game.Objects.Walls.BreakableWalls;
+using Game.Objects.Other;
 
 namespace Game
 {
@@ -33,6 +34,7 @@ namespace Game
         Enemy enemy;
         List<Bullet> bullets;
         List<Enemy> enemies;
+        List<GameObject> gameObjects;
         private void GameLoop(object sender, EventArgs e)
         {
             player.BoardWhidth = (int)GameBoard.Width;
@@ -40,6 +42,17 @@ namespace Game
             player.ShowInterface(Interface);
             player.PlayerMove(GameBoard);
             player.Fire(bullets, GameBoard);
+            foreach (var item in gameObjects)
+            {
+                if(item is WoodenWall)
+                {
+                    item.CheckDeath(gameObjects, GameBoard);
+                }
+                else if (item is EnemySummoningPoint)
+                {
+                    ((EnemySummoningPoint)item).SummonEnemy(GameBoard, enemies);
+                }
+            }
             foreach (var item in bullets)
             {
                 item.BoardWhidth = (int)GameBoard.Width;
@@ -78,11 +91,14 @@ namespace Game
             Interface.Height = System.Windows.SystemParameters.PrimaryScreenHeight;
             bullets = new List<Bullet>();
             enemies = new List<Enemy>();
-            enemy = new Enemy(new Point(0,0), GameBoard, enemies);
+            gameObjects = new List<GameObject>();
+
             player = new Player((int)System.Windows.SystemParameters.PrimaryScreenWidth, (int)System.Windows.SystemParameters.PrimaryScreenHeight, GameBoard, Interface);
 
-            StoneWall stonewall = new StoneWall(new Point(200, 100), GameBoard);
-            WoodenWall woodenWall = new WoodenWall(new Point(200,150), GameBoard);
+            GameObject testobject = new StoneWall(new Point(200, 100), GameBoard, gameObjects);
+            GameObject ennemySpawn = new EnemySummoningPoint(new Point(0,0), GameBoard, gameObjects);
+            WoodenWall woodenWall = new WoodenWall(new Point(200,150), GameBoard, gameObjects);
+
         }
         
         private void OnKeyDown1(object sender, KeyEventArgs e)

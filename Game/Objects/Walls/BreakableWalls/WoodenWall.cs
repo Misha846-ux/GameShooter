@@ -17,8 +17,9 @@ namespace Game.Objects.Walls.BreakableWalls
 {
     internal class WoodenWall: GameObject
     {
-        public WoodenWall(Point position, Canvas GameBoard)
+        public WoodenWall(Point position, Canvas GameBoard, List<GameObject> gameObjects)
         {
+            gameObjects.Add(this);
             ImageBrush WoodenWallTexture = new ImageBrush();
             WoodenWallTexture.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Textures/WoodenWall.png"));
             this.body.Fill = WoodenWallTexture;

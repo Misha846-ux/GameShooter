@@ -35,6 +35,7 @@ namespace Game
         List<Bullet> bullets;
         List<Enemy> enemies;
         List<GameObject> gameObjects;
+        List<Object> itemRemover = new List<Object>();
         private void GameLoop(object sender, EventArgs e)
         {
             player.BoardWhidth = (int)GameBoard.Width;
@@ -58,6 +59,11 @@ namespace Game
                 item.BoardWhidth = (int)GameBoard.Width;
                 item.BoardHeight = (int)GameBoard.Height;
                 item.BulletMove(GameBoard);
+                if(player.GetHitBox().IntersectsWith(item.GetHitBox()))
+                {
+                    itemRemover.Add(item);
+                    player.ReduceHealth(item.GetDamage());
+                }
             }
             foreach (var item in enemies)
             {

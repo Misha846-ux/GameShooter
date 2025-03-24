@@ -13,7 +13,7 @@
             MouseUp="OnMouseUp">
         <Canvas Name="GameBoard" Focusable="True" Background="Black" ></Canvas>
         <Canvas Name="Interface"></Canvas>
-
+        
     </Canvas>
 
 </Window>

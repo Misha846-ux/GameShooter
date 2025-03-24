@@ -25,6 +25,7 @@ namespace Game.Creatures.Players
         public Point MousePosition {  get; set; }// regarding Canvas
         private Gun gun;
         private Label ammoCounter;
+        private Label healthText;
         private bool moveUp;
         private bool moveDown;
         private bool moveLeft;
@@ -60,6 +61,16 @@ namespace Game.Creatures.Players
                 FontWeight = FontWeights.Bold,
                 Foreground = new SolidColorBrush(Colors.White)
             };
+
+            this.healthText = new Label
+            {
+                Name = "HealthText",
+                Content = " ",
+                FontSize = 20,
+                FontWeight = FontWeights.Bold,
+                Foreground = new SolidColorBrush(Colors.White)
+            };
+
             Canvas.SetLeft(this.ammoCounter, 0);
             Canvas.SetTop(this.ammoCounter, 0);
             Interfase.Children.Add(this.ammoCounter);
@@ -114,6 +125,7 @@ namespace Game.Creatures.Players
                 
             }
             this.ammoCounter.Content = "Ammo: " + gun.Ammo + " / " + gun.MaxAmmo;
+            this.healthText.Content = "Health: " + GetHealth();
         }
         public void MouseDownRead(MouseButtonEventArgs e)
         {

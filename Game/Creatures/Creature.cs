@@ -19,7 +19,8 @@ namespace Game.Creatures
     
     internal abstract class Creature
     {
-        
+        protected Rect hitBox;
+        protected int health = 100;
         protected Rectangle body;
         protected int creatureSpeed;
         public int BoardWhidth {  get; set; }
@@ -32,14 +33,31 @@ namespace Game.Creatures
                 Width = 50,
                 Height = 50,
             };
-            
+
             BoardWhidth = 500;
             BoardHeight = 800;
+
+            hitBox = new Rect(BoardWhidth, BoardHeight, body.Width, body.Height);
         }
 
         public Rectangle GetBody()
         {
             return this.body;
+        }
+
+        public Rect GetHitBox()
+        {
+            return this.hitBox;
+        }
+
+        public void ReduceHealth(int damage)
+        {
+            health -= damage;
+        }
+
+        public int GetHealth()
+        {
+            return health;
         }
     }
 }

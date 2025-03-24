@@ -18,6 +18,8 @@ namespace Game.Bullets
 {
     internal class Bullet
     {
+        protected int damage = 10;
+        protected Rect hitBox;
         protected Rectangle bullet;
         protected Point startPosition; // stores the position the player is in when the bullet is launched
         protected Point mousePosition; // stores the position the mouse was in when the bullet was launched
@@ -38,8 +40,17 @@ namespace Game.Bullets
             this.mousePosition = mousePosition;
             Canvas.SetLeft(this.bullet, startPosition.X);
             Canvas.SetTop(this.bullet, startPosition.Y);
+            hitBox = new Rect(BoardWhidth, BoardHeight, bullet.Width, bullet.Height);
         }
 
+        public int GetDamage()
+        {
+            return damage;
+        }
+        public Rect GetHitBox()
+        {
+            return hitBox;
+        }
         public Rectangle GetBullet()
         {
             return this.bullet;

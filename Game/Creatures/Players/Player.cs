@@ -66,7 +66,7 @@ namespace Game.Creatures.Players
             {
                 Name = "HealthText",
                 Content = " ",
-                FontSize = 20,
+                FontSize = 18,
                 FontWeight = FontWeights.Bold,
                 Foreground = new SolidColorBrush(Colors.White)
             };
@@ -74,6 +74,10 @@ namespace Game.Creatures.Players
             Canvas.SetLeft(this.ammoCounter, 0);
             Canvas.SetTop(this.ammoCounter, 0);
             Interfase.Children.Add(this.ammoCounter);
+
+            Canvas.SetLeft(this.healthText, 0);
+            Canvas.SetTop(this.healthText, 25);
+            Interfase.Children.Add(this.healthText);
         }
 
         public void KeyDownRead(KeyEventArgs e)

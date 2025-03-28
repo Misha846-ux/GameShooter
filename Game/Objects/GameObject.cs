@@ -31,11 +31,11 @@ namespace Game.Objects
             
         }
 
-        public virtual void CheckDeath(List<GameObject> gameObjects, Canvas GameBoard)
+        public virtual void CheckDeath(MemoryCleaner memoryCleaner, Canvas GameBoard)
         {
             if(Health <= 0)
             {
-                gameObjects.Remove(this);
+                memoryCleaner.AddObject(this);
                 GameBoard.Children.Remove(this.body);
                 
             }

@@ -47,6 +47,6 @@ namespace Game.Objects.Other
             }
         }
 
-        public override void CheckDeath(List<GameObject> gameObjects, Canvas GameBoard) { }
+        public override void CheckDeath(MemoryCleaner memoryCleaner, Canvas GameBoard) { }
     }
 }

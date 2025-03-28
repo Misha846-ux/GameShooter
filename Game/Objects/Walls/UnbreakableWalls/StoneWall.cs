@@ -31,7 +31,7 @@ namespace Game.Objects.Walls.UnbreakableWalls
 
         }
 
-        public override void CheckDeath(List<GameObject> gameObjects, Canvas GameBoard)
+        public override void CheckDeath(MemoryCleaner memoryCleaner, Canvas GameBoard)
         {
 
         }

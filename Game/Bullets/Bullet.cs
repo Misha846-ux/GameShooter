@@ -23,8 +23,6 @@ namespace Game.Bullets
         protected Point mousePosition; // stores the position the mouse was in when the bullet was launched
         protected double liveTime;
         protected int bulletSpeed;
-        public int BoardWhidth { get; set; }
-        public int BoardHeight { get; set; }
         public Bullet(Point startPosition, Point mousePosition, List<Bullet> bullets)
         {
             this.bullet = new Rectangle
@@ -48,7 +46,7 @@ namespace Game.Bullets
             return this.bullet;
         }
 
-        public void BulletMove(Canvas MyCanvas)
+        public void BulletMove(MemoryCleaner memoryCleaner, Canvas MyCanvas)
         {
 
             Point nextPosition = CalculateTrajectory();
@@ -57,18 +55,22 @@ namespace Game.Bullets
             if (Canvas.GetLeft(this.bullet) <= -100)
             {
                 MyCanvas.Children.Remove(this.bullet);
+                memoryCleaner.AddObject(this);
             }
-            else if(Canvas.GetLeft(this.bullet)-100 > this.BoardWhidth)
+            else if(Canvas.GetLeft(this.bullet)-100 > MyCanvas.Width)
             {
                 MyCanvas.Children.Remove(this.bullet);
+                memoryCleaner.AddObject(this);
             }
             else if (Canvas.GetTop(this.bullet) <= -100)
             {
                 MyCanvas.Children.Remove(this.bullet);
+                memoryCleaner.AddObject(this);
             }
-            else if (Canvas.GetTop(this.bullet)-100 > this.BoardHeight)
+            else if (Canvas.GetTop(this.bullet)-100 > MyCanvas.Height)
             {
                 MyCanvas.Children.Remove(this.bullet);
+                memoryCleaner.AddObject(this);
             }
         }
 

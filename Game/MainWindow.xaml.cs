@@ -34,6 +34,7 @@ namespace Game
         List<Bullet> bullets;
         List<Enemy> enemies;
         List<GameObject> gameObjects;
+        MemoryCleaner memoryCleaner;
         private void GameLoop(object sender, EventArgs e)
         {
             player.BoardWhidth = (int)GameBoard.Width;
@@ -45,7 +46,7 @@ namespace Game
             {
                 if(item is WoodenWall)
                 {
-                    item.CheckDeath(gameObjects, GameBoard);
+                    item.CheckDeath(memoryCleaner, GameBoard);
                 }
                 else if (item is EnemySummoningPoint)
                 {
@@ -54,15 +55,14 @@ namespace Game
             }
             foreach (var item in bullets)
             {
-                item.BoardWhidth = (int)GameBoard.Width;
-                item.BoardHeight = (int)GameBoard.Height;
-                item.BulletMove(GameBoard);
+                item.BulletMove(memoryCleaner, GameBoard);
             }
             foreach (var item in enemies)
             {
                 item.Shot(player.GetBody(), bullets, GameBoard);
                 item.move(player.GetPosition(), GameBoard);
             }
+            memoryCleaner.Clean(bullets, gameObjects, enemies);
         }
         public MainWindow()
         {
@@ -92,6 +92,7 @@ namespace Game
             bullets = new List<Bullet>();
             enemies = new List<Enemy>();
             gameObjects = new List<GameObject>();
+            memoryCleaner = new MemoryCleaner();
 
             player = new Player((int)System.Windows.SystemParameters.PrimaryScreenWidth, (int)System.Windows.SystemParameters.PrimaryScreenHeight, GameBoard, Interface);
 

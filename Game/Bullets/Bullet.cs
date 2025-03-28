@@ -21,10 +21,11 @@ namespace Game.Bullets
         protected Rectangle bullet;
         protected Point startPosition; // stores the position the player is in when the bullet is launched
         protected Point mousePosition; // stores the position the mouse was in when the bullet was launched
+        protected double liveTime;
         protected int bulletSpeed;
         public int BoardWhidth { get; set; }
         public int BoardHeight { get; set; }
-        public Bullet(Point startPosition, Point mousePosition)
+        public Bullet(Point startPosition, Point mousePosition, List<Bullet> bullets)
         {
             this.bullet = new Rectangle
             {
@@ -36,6 +37,8 @@ namespace Game.Bullets
             this.bulletSpeed = 20;
             this.startPosition = startPosition;
             this.mousePosition = mousePosition;
+            this.liveTime = 1;
+            bullets.Add(this);
             Canvas.SetLeft(this.bullet, startPosition.X);
             Canvas.SetTop(this.bullet, startPosition.Y);
         }
@@ -47,15 +50,10 @@ namespace Game.Bullets
 
         public void BulletMove(Canvas MyCanvas)
         {
-            
-            Point nextPosition = new Point(this.mousePosition.X - this.startPosition.X, this.mousePosition.Y - this.startPosition.Y);
-            while (Math.Abs(nextPosition.X) > this.bulletSpeed || Math.Abs(nextPosition.Y) > this.bulletSpeed)
-            {
-                nextPosition.X *= 0.5;
-                nextPosition.Y *= 0.5;
-            }
-            Canvas.SetLeft(bullet, Canvas.GetLeft(bullet) + nextPosition.X);
-            Canvas.SetTop(bullet, Canvas.GetTop(bullet) + nextPosition.Y);
+
+            Point nextPosition = CalculateTrajectory();
+            Canvas.SetLeft(bullet, nextPosition.X);
+            Canvas.SetTop(bullet, nextPosition.Y);
             if (Canvas.GetLeft(this.bullet) <= -100)
             {
                 MyCanvas.Children.Remove(this.bullet);
@@ -72,6 +70,22 @@ namespace Game.Bullets
             {
                 MyCanvas.Children.Remove(this.bullet);
             }
+        }
+
+        protected Point CalculateTrajectory()
+        {
+            
+            double angle = Math.Atan2(this.mousePosition.Y - this.startPosition.Y, this.mousePosition.X - this.startPosition.X);
+
+            double vX = bulletSpeed * Math.Cos(angle);
+            double vY = bulletSpeed * Math.Sin(angle);
+
+            double x = this.startPosition.X + vX * liveTime;
+            double y = this.startPosition.Y + vY * liveTime;
+
+            this.liveTime += 1;
+
+            return new Point(x, y);
         }
 
 

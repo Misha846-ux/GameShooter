@@ -36,6 +36,10 @@ namespace Game.Creatures
             BoardWhidth = 500;
             BoardHeight = 800;
         }
+        public Point GetPosition()
+        {
+            return new Point(Canvas.GetLeft(this.body), Canvas.GetTop(this.body));
+        }
 
         public Rectangle GetBody()
         {

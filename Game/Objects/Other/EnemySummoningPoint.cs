@@ -25,13 +25,13 @@ namespace Game.Objects.Other
         {
             gameObjects.Add(this);
             this.body.Fill = new SolidColorBrush(Colors.Gray);
-            this.body.Tag = "EnemySummoningPoint";
             Canvas.SetLeft(this.body, position.X);
             Canvas.SetTop(this.body, position.Y);
             this.hitBox = new Rect(position.X, position.Y, body.Width, body.Height);
             GameBoard.Children.Add(this.body);
             this._summonTime = 500;
             this._summonTimer = 500;
+            this._spawnPosition = new Point(position.X, position.Y);
         }
 
         public void SummonEnemy(Canvas GameBoard, List<Enemy> enemies)

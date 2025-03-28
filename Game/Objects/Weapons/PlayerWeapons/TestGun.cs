@@ -35,8 +35,7 @@ namespace Game.Objects.Weapons.PlayerWeapons
         {
             if (CheckIfFirePossible())
             {
-                Bullet newBullet = new Bullet(PlayerPosition, mousePosition);
-                bullets.Add(newBullet);
+                Bullet newBullet = new Bullet(PlayerPosition, mousePosition, bullets);
                 MyCanvas.Children.Add(newBullet.GetBullet());
             }
         }

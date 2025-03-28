@@ -42,5 +42,27 @@ namespace Game.Creatures.Enemies
             gun.GunReload();
             gun.Shot(new Point(Canvas.GetLeft(player), Canvas.GetTop(player)), bullets, MyCanvas);
         }
+
+        public void move(Point playerPosition, Canvas MyCanvas)
+        {
+            Point nextPosition = CalculatePathToPlayer(playerPosition);
+
+            Canvas.SetLeft(this.body, nextPosition.X);
+            Canvas.SetTop(this.body, nextPosition.Y);
+            gun.PlayerPosition = GetPosition();
+        }
+
+        protected Point CalculatePathToPlayer(Point playerPosition)
+        {
+            double angle = Math.Atan2(playerPosition.Y - GetPosition().Y, playerPosition.X - GetPosition().X);
+
+            double vX = this.creatureSpeed * Math.Cos(angle);
+            double vY = this.creatureSpeed * Math.Sin(angle);
+
+            double x = GetPosition().X + vX;
+            double y = GetPosition().Y + vY;
+
+            return new Point(x, y);
+        }
     }
 }

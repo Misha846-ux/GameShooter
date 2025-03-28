@@ -31,7 +31,6 @@ namespace Game
         DispatcherTimer timer = new DispatcherTimer();
 
         Player player;
-        Enemy enemy;
         List<Bullet> bullets;
         List<Enemy> enemies;
         List<GameObject> gameObjects;
@@ -62,6 +61,7 @@ namespace Game
             foreach (var item in enemies)
             {
                 item.Shot(player.GetBody(), bullets, GameBoard);
+                item.move(player.GetPosition(), GameBoard);
             }
         }
         public MainWindow()
@@ -96,7 +96,11 @@ namespace Game
             player = new Player((int)System.Windows.SystemParameters.PrimaryScreenWidth, (int)System.Windows.SystemParameters.PrimaryScreenHeight, GameBoard, Interface);
 
             GameObject testobject = new StoneWall(new Point(200, 100), GameBoard, gameObjects);
-            GameObject ennemySpawn = new EnemySummoningPoint(new Point(0,0), GameBoard, gameObjects);
+            new EnemySummoningPoint(new Point(0,0), GameBoard, gameObjects);
+            new EnemySummoningPoint(new Point(500, 0), GameBoard, gameObjects);
+            new EnemySummoningPoint(new Point(1000, 0), GameBoard, gameObjects);
+            new EnemySummoningPoint(new Point(1500, 0), GameBoard, gameObjects);
+            new EnemySummoningPoint(new Point(2000, 0), GameBoard, gameObjects);
             WoodenWall woodenWall = new WoodenWall(new Point(200,150), GameBoard, gameObjects);
 
         }

@@ -18,7 +18,7 @@ namespace Game.Objects
     internal abstract class GameObject
     {
         protected Rectangle body;
-        protected Rect hitBox;
+        public Rect hitBox { get; set; }
         public int Health { get; set; }
 
         public GameObject()

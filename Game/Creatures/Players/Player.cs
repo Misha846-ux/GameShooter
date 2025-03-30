@@ -49,6 +49,8 @@ namespace Game.Creatures.Players
             this.moveRight = false;
             this.shot = false;
             this.fastReload = false;
+            hitBox = new Rect(BoardWhidth, BoardHeight, body.Width, body.Height);
+            this.Health = 100;
 
             gun = new TestGun();
             gun.PlayerPosition = new Point(Canvas.GetLeft(this.body), Canvas.GetTop(this.body));
@@ -129,7 +131,7 @@ namespace Game.Creatures.Players
                 
             }
             this.ammoCounter.Content = "Ammo: " + gun.Ammo + " / " + gun.MaxAmmo;
-            this.healthText.Content = "Health: " + GetHealth();
+            this.healthText.Content = "Health: " + Health;
         }
         public void MouseDownRead(MouseButtonEventArgs e)
         {
@@ -153,21 +155,25 @@ namespace Game.Creatures.Players
             {
                 Canvas.SetTop(this.body, Canvas.GetTop(this.body) - this.creatureSpeed);
                 Canvas.SetTop(GameBoard, Canvas.GetTop(GameBoard) + this.creatureSpeed);
+                hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), hitBox.Width, hitBox.Height);
             }
             else if (this.moveDown && Canvas.GetTop(this.body)+50 < this.BoardHeight)
             {
                 Canvas.SetTop(this.body, Canvas.GetTop(this.body) + this.creatureSpeed);
                 Canvas.SetTop(GameBoard, Canvas.GetTop(GameBoard) - this.creatureSpeed);
+                hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), hitBox.Width, hitBox.Height);
             }
             if (this.moveRight && Canvas.GetLeft(this.body) + 50 < this.BoardWhidth)
             {
                 Canvas.SetLeft(this.body, Canvas.GetLeft(this.body) + this.creatureSpeed);
                 Canvas.SetLeft(GameBoard, Canvas.GetLeft(GameBoard) - this.creatureSpeed);
+                hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), hitBox.Width, hitBox.Height);
             }
             else if (this.moveLeft && Canvas.GetLeft(this.body) > 0)
             {
                 Canvas.SetLeft(this.body, Canvas.GetLeft(this.body) - this.creatureSpeed);
                 Canvas.SetLeft(GameBoard, Canvas.GetLeft(GameBoard) + this.creatureSpeed);
+                hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), hitBox.Width, hitBox.Height);
             }
             gun.PlayerPosition = new Point(Canvas.GetLeft(this.body), Canvas.GetTop(this.body));
         }

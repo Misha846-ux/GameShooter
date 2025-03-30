@@ -30,5 +30,9 @@ namespace Game.Objects.Walls.BreakableWalls
             GameBoard.Children.Add(this.body);
             this.Health = 100;
         }
+        public void ReduceHealth(int damage)
+        {
+            Health = Health - damage;
+        }
     }
 }

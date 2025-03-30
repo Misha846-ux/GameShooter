@@ -24,6 +24,8 @@ namespace Game.Creatures.Enemies
         private TestGun gun;
         public Enemy(Point spawnPoint, Canvas MyCanvas, List<Enemy> enemies)
         {
+            hitBox = new Rect(BoardWhidth, BoardHeight, body.Width, body.Height);
+            this.Health = 50;
             this.body.Fill = new SolidColorBrush(Colors.Blue);
             this.body.Name = "enemy";
             this.creatureSpeed = 10;

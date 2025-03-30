@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Game.Bullets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,7 +29,6 @@ namespace Game.Objects.Walls.UnbreakableWalls
             Canvas.SetTop(this.body, position.Y);
             this.hitBox = new Rect(position.X, position.Y, body.Width, body.Height);
             GameBoard.Children.Add(this.body);
-
         }
 
         public override void CheckDeath(List<GameObject> gameObjects, Canvas GameBoard)

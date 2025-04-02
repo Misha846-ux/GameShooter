@@ -25,7 +25,7 @@ namespace Game.Bullets
     internal class Bullet
     {
         public int Damage { get; set; }
-        public Rect hitBox { get; set; }
+        public Rect hitBox; 
         protected Rectangle bullet;
         protected Point startPosition; // stores the position the player is in when the bullet is launched
         protected Point mousePosition; // stores the position the mouse was in when the bullet was launched
@@ -62,6 +62,8 @@ namespace Game.Bullets
             Point nextPosition = CalculateTrajectory();
             Canvas.SetLeft(bullet, nextPosition.X);
             Canvas.SetTop(bullet, nextPosition.Y);
+            this.hitBox.X = nextPosition.X ;
+            this.hitBox.Y = nextPosition.Y;
             if (Canvas.GetLeft(this.bullet) <= -100)
             {
                 MyCanvas.Children.Remove(this.bullet);

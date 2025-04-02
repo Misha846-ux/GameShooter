@@ -59,21 +59,15 @@ namespace Game
             }
             foreach (var item in playerBullets) 
             {
-                foreach (var item2 in enemies)
-                {
-                    item.BulletMove(memoryCleaner, GameBoard, playerBullets);
-                    if (item.CheckCollisionWihtEnemy(item2, playerBullets, GameBoard))
-                    {
-                        playerBullets.Remove(item);
-                        //GameBoard.Children.Remove(item);
-                        //GameBoard.Children.Remove(item);
-                        item2.ReduceHealth(item.Damage);
-                    }
-                }
+                 item.BulletMove(memoryCleaner, GameBoard);
+                 item.CheckCollisionWihtEnemy(enemies, memoryCleaner, GameBoard);
+
+
             }
             foreach (var item in enemyBullets)
             {
-                item.BulletMove(memoryCleaner, GameBoard, enemyBullets);
+                item.BulletMove(memoryCleaner, GameBoard);
+                item.CheckCollisionWihtPlayer(player, memoryCleaner, GameBoard);
             }
             foreach (var item in enemies)
             {

@@ -42,51 +42,16 @@ namespace Game.Bullets.EnemyBullets
                 wall.ReduceHealth(this.Damage);
             }
         }
-        public void CheckCollisionWihtPlayer(Player player, List<EnemOrdinaryBullet> gameObjects, Canvas GameBoard)
+        public void CheckCollisionWihtPlayer(Player player, MemoryCleaner memoryCleaner, Canvas GameBoard)
         {
-            if (player.hitBox.IntersectsWith(this.hitBox))
+            if (this.hitBox.IntersectsWith(player.hitBox))
             {
-                this.Death(gameObjects, GameBoard);
+                memoryCleaner.AddObject(this);
                 GameBoard.Children.Remove(this.bullet);
                 player.ReduceHealth(this.Damage);
             }
         }
-        public void BulletMove(MemoryCleaner memoryCleaner, Canvas MyCanvas, List<EnemOrdinaryBullet> gameObjects)
-        {
-            
-            Point nextPosition = new Point(this.mousePosition.X - this.startPosition.X, this.mousePosition.Y - this.startPosition.Y);
-            while (Math.Abs(nextPosition.X) > this.bulletSpeed || Math.Abs(nextPosition.Y) > this.bulletSpeed)
-            {
-                nextPosition.X *= 0.5;
-                nextPosition.Y *= 0.5;
-            }
-            Canvas.SetLeft(bullet, Canvas.GetLeft(bullet) + nextPosition.X);
-            Canvas.SetTop(bullet, Canvas.GetTop(bullet) + nextPosition.Y);
-            hitBox = new Rect(nextPosition.X, nextPosition.Y, hitBox.Width, hitBox.Height);
-            //this.CheckCollisionWihtPlayer(player, gameObjects, MyCanvas);
-            //this.CheckCollisionWithWall(wall, gameObjects, MyCanvas);
-
-
-            if (Canvas.GetLeft(this.bullet) <= -100)
-            {
-                MyCanvas.Children.Remove(this.bullet);
-                memoryCleaner.AddObject(this);
-            }
-            else if (Canvas.GetLeft(this.bullet) - 100 > this.BoardWhidth)
-            {
-                MyCanvas.Children.Remove(this.bullet);
-                memoryCleaner.AddObject(this);
-            }
-            else if (Canvas.GetTop(this.bullet) <= -100)
-            {
-                MyCanvas.Children.Remove(this.bullet);
-                memoryCleaner.AddObject(this);
-            }
-            else if (Canvas.GetTop(this.bullet) - 100 > this.BoardHeight)
-            {
-                MyCanvas.Children.Remove(this.bullet);
-                memoryCleaner.AddObject(this);
-            }
-        }
+       
+        
     }
 }

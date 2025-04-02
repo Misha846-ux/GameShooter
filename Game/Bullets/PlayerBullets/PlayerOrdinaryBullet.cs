@@ -10,6 +10,7 @@ using Game.Creatures.Enemies;
 using Game.Objects.Walls.BreakableWalls;
 using static System.Net.Mime.MediaTypeNames;
 using Game.Bullets.EnemyBullets;
+using System.Windows.Media;
 
 namespace Game.Bullets.PlayerBullets
 {
@@ -18,6 +19,7 @@ namespace Game.Bullets.PlayerBullets
         public PlayerOrdinaryBullet(Point startPosition, Point mousePosition, int damage, List<PlayerOrdinaryBullet> bullets) : base(startPosition, mousePosition, damage)
         {
             bullets.Add(this);
+            this.bullet.Fill = new SolidColorBrush(Colors.Blue);
         }
         //public void Death(List<PlayerOrdinaryBullet> gameObjects, Canvas GameBoard)
         //{
@@ -34,49 +36,19 @@ namespace Game.Bullets.PlayerBullets
         //        wall.ReduceHealth(this.Damage);
         //    }
         //}
-        public bool CheckCollisionWihtEnemy(Enemy enemy, List<PlayerOrdinaryBullet> gameObjects, Canvas GameBoard)
+        public void CheckCollisionWihtEnemy( List<Enemy> gameObjects, MemoryCleaner memoryCleaner, Canvas GameBoard)
         {
-            if (enemy.hitBox.IntersectsWith(this.hitBox))
-                return true;
-            else
-                return false;
-        }
-        public void BulletMove(MemoryCleaner memoryCleaner, Canvas MyCanvas, List<PlayerOrdinaryBullet> gameObjects)
-        {
-
-            Point nextPosition = new Point(this.mousePosition.X - this.startPosition.X, this.mousePosition.Y - this.startPosition.Y);
-            while (Math.Abs(nextPosition.X) > this.bulletSpeed || Math.Abs(nextPosition.Y) > this.bulletSpeed)
+            foreach (var item in gameObjects)
             {
-                nextPosition.X *= 0.5;
-                nextPosition.Y *= 0.5;
-            }
-            Canvas.SetLeft(bullet, Canvas.GetLeft(bullet) + nextPosition.X);
-            Canvas.SetTop(bullet, Canvas.GetTop(bullet) + nextPosition.Y);
-            hitBox = new Rect(nextPosition.X, nextPosition.Y, hitBox.Width, hitBox.Height);
-            //this.CheckCollisionWihtEnemy(enemy, gameObjects, MyCanvas);
-            //this.CheckCollisionWithWall(wall, gameObjects, MyCanvas);
-
-
-            if (Canvas.GetLeft(this.bullet) <= -100)
-            {
-                MyCanvas.Children.Remove(this.bullet);
-                memoryCleaner.AddObject(this);
-            }
-            else if (Canvas.GetLeft(this.bullet) - 100 > this.BoardWhidth)
-            {
-                MyCanvas.Children.Remove(this.bullet);
-                memoryCleaner.AddObject(this);
-            }
-            else if (Canvas.GetTop(this.bullet) <= -100)
-            {
-                MyCanvas.Children.Remove(this.bullet);
-                memoryCleaner.AddObject(this);
-            }
-            else if (Canvas.GetTop(this.bullet) - 100 > this.BoardHeight)
-            {
-                MyCanvas.Children.Remove(this.bullet);
-                memoryCleaner.AddObject(this);
+                if(this.hitBox.IntersectsWith(item.hitBox))
+                {
+                    memoryCleaner.AddObject(this);
+                    GameBoard.Children.Remove(this.bullet);
+                    item.ReduceHealth(this.Damage);
+                }
             }
         }
+       
+     
     }
 }

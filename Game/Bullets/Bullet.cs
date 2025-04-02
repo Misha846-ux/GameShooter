@@ -1,4 +1,5 @@
-﻿using Game.Creatures.Players;
+﻿using Game.Bullets.EnemyBullets;
+using Game.Creatures.Players;
 using Game.Objects;
 using Game.Objects.Walls.BreakableWalls;
 using System;
@@ -28,6 +29,7 @@ namespace Game.Bullets
         protected Rectangle bullet;
         protected Point startPosition; // stores the position the player is in when the bullet is launched
         protected Point mousePosition; // stores the position the mouse was in when the bullet was launched
+        protected double liveTime;
         protected int bulletSpeed;
         public int BoardWhidth { get; set; }
         public int BoardHeight { get; set; }
@@ -43,63 +45,63 @@ namespace Game.Bullets
             this.bulletSpeed = 20;
             this.startPosition = startPosition;
             this.mousePosition = mousePosition;
+            this.liveTime = 1;
             Canvas.SetLeft(this.bullet, startPosition.X);
             Canvas.SetTop(this.bullet, startPosition.Y);
-            hitBox = new Rect(BoardWhidth, BoardHeight, bullet.Width, bullet.Height);
             Damage = damage;
+            hitBox = new Rect(Canvas.GetLeft(this.bullet), Canvas.GetTop(this.bullet), bullet.Width, bullet.Height);
         }
-        public Bullet(Point startPosition, Point mousePosition) : this(startPosition, mousePosition, 5) { }
+        //public Bullet(Point startPosition, Point mousePosition) : this(startPosition, mousePosition, 5) { }
         public Rectangle GetBullet()
         {
             return this.bullet;
         }
-        public void Death(List<Bullet> gameObjects, Canvas GameBoard)
+        public void BulletMove(MemoryCleaner memoryCleaner, Canvas MyCanvas)
         {
-            gameObjects.Remove(this);
-            GameBoard.Children.Remove(this.bullet);
-            //GameBoard.Children.Remove(this.hitBox);
-        }
-        public void CheckCollisionWithWall( WoodenWall wall, List<Bullet> gameObjects, Canvas GameBoard)
-        {
-            if (wall.hitBox.IntersectsWith(this.hitBox))
-            {
-                this.Death(gameObjects, GameBoard);
-                GameBoard.Children.Remove(bullet);
-                wall.ReduceHealth(this.Damage);
-            }
-        }
-        public void BulletMove(Canvas MyCanvas)
-        {
-            
-            Point nextPosition = new Point(this.mousePosition.X - this.startPosition.X, this.mousePosition.Y - this.startPosition.Y);
-            while (Math.Abs(nextPosition.X) > this.bulletSpeed || Math.Abs(nextPosition.Y) > this.bulletSpeed)
-            {
-                nextPosition.X *= 0.5;
-                nextPosition.Y *= 0.5;
-            }
-            Canvas.SetLeft(bullet, Canvas.GetLeft(bullet) + nextPosition.X);
-            Canvas.SetTop(bullet, Canvas.GetTop(bullet) + nextPosition.Y);
-            hitBox = new Rect(nextPosition.X, nextPosition.Y, hitBox.Width, hitBox.Height);
-            //this.CheckCollisionWithWall(wall, gameObjects, MyCanvas);
 
+            Point nextPosition = CalculateTrajectory();
+            Canvas.SetLeft(bullet, nextPosition.X);
+            Canvas.SetTop(bullet, nextPosition.Y);
             if (Canvas.GetLeft(this.bullet) <= -100)
             {
                 MyCanvas.Children.Remove(this.bullet);
+                memoryCleaner.AddObject(this);
             }
-            else if(Canvas.GetLeft(this.bullet)-100 > this.BoardWhidth)
+            else if (Canvas.GetLeft(this.bullet) - 100 > MyCanvas.Width)
             {
                 MyCanvas.Children.Remove(this.bullet);
+                memoryCleaner.AddObject(this);
             }
             else if (Canvas.GetTop(this.bullet) <= -100)
             {
                 MyCanvas.Children.Remove(this.bullet);
+                memoryCleaner.AddObject(this);
             }
-            else if (Canvas.GetTop(this.bullet)-100 > this.BoardHeight)
+            else if (Canvas.GetTop(this.bullet) - 100 > MyCanvas.Height)
             {
                 MyCanvas.Children.Remove(this.bullet);
+                memoryCleaner.AddObject(this);
             }
+        }
+
+        protected Point CalculateTrajectory()
+        {
+
+            double angle = Math.Atan2(this.mousePosition.Y - this.startPosition.Y, this.mousePosition.X - this.startPosition.X);
+
+            double vX = bulletSpeed * Math.Cos(angle);
+            double vY = bulletSpeed * Math.Sin(angle);
+
+            double x = this.startPosition.X + vX * liveTime;
+            double y = this.startPosition.Y + vY * liveTime;
+
+            this.liveTime += 1;
+
+            return new Point(x, y);
         }
 
 
     }
+    //hitBox = new Rect(nextPosition.X, nextPosition.Y, hitBox.Width, hitBox.Height);
+    //this.CheckCollisionWithWall(wall, gameObjects, MyCanvas);
 }

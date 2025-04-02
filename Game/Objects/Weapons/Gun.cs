@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Game.Creatures.Players;
 using Game.Bullets;
+using Game.Bullets.PlayerBullets;
+using Game.Bullets.EnemyBullets;
 namespace Game.Objects.Weapons
 {
 
@@ -72,7 +74,7 @@ namespace Game.Objects.Weapons
 
         }
 
-        public abstract void Shot(Point mousePosition, List<Bullet> bullets, Canvas MyCanvas);
-
+        public abstract void Shot(Point mousePosition, List<PlayerOrdinaryBullet> bullets, Canvas MyCanvas);
+        public abstract void Shot(Point mousePosition, List<EnemOrdinaryBullet> bullets, Canvas MyCanvas);
     }
 }

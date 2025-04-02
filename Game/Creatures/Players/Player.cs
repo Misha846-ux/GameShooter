@@ -17,6 +17,7 @@ using Game.Bullets;
 using Game.Objects.Weapons;
 using Game.Objects.Weapons.PlayerWeapons;
 using System.Xml.Linq;
+using Game.Bullets.PlayerBullets;
 
 namespace Game.Creatures.Players
 {
@@ -49,10 +50,9 @@ namespace Game.Creatures.Players
             this.moveRight = false;
             this.shot = false;
             this.fastReload = false;
-            hitBox = new Rect(BoardWhidth, BoardHeight, body.Width, body.Height);
             this.Health = 100;
 
-            gun = new TestGun();
+            gun = new PlayerGun();
             gun.PlayerPosition = new Point(Canvas.GetLeft(this.body), Canvas.GetTop(this.body));
 
             this.ammoCounter = new Label
@@ -80,6 +80,8 @@ namespace Game.Creatures.Players
             Canvas.SetLeft(this.healthText, 0);
             Canvas.SetTop(this.healthText, 25);
             Interfase.Children.Add(this.healthText);
+
+            hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), body.Width, body.Height);
         }
 
         public void KeyDownRead(KeyEventArgs e)
@@ -178,7 +180,7 @@ namespace Game.Creatures.Players
             gun.PlayerPosition = new Point(Canvas.GetLeft(this.body), Canvas.GetTop(this.body));
         }
 
-        public void Fire(List<Bullet> bullets, Canvas MyCanvas)
+        public void Fire(List<PlayerOrdinaryBullet> bullets, Canvas MyCanvas)
         {
             if (this.fastReload)
             {
@@ -193,4 +195,5 @@ namespace Game.Creatures.Players
 
         }
     }
+    
 }

@@ -16,7 +16,7 @@ using Game.Creatures.Enemies;
 
 namespace Game.Objects.Other
 {
-    internal class EnemySummoningPoint: GameObject
+    internal class EnemySummoningPoint : GameObject
     {
         private readonly int _summonTime;
         private int _summonTimer;
@@ -25,18 +25,18 @@ namespace Game.Objects.Other
         {
             gameObjects.Add(this);
             this.body.Fill = new SolidColorBrush(Colors.Gray);
-            this.body.Tag = "EnemySummoningPoint";
             Canvas.SetLeft(this.body, position.X);
             Canvas.SetTop(this.body, position.Y);
             this.hitBox = new Rect(position.X, position.Y, body.Width, body.Height);
             GameBoard.Children.Add(this.body);
             this._summonTime = 500;
             this._summonTimer = 500;
+            this._spawnPosition = new Point(position.X, position.Y);
         }
 
         public void SummonEnemy(Canvas GameBoard, List<Enemy> enemies)
         {
-            if(this._summonTimer >= this._summonTime)
+            if (this._summonTimer >= this._summonTime)
             {
                 Enemy newEnemy = new Enemy(this._spawnPosition, GameBoard, enemies);
                 this._summonTimer = 0;
@@ -47,6 +47,6 @@ namespace Game.Objects.Other
             }
         }
 
-        public override void CheckDeath(List<GameObject> gameObjects, Canvas GameBoard) { }
+        public override void CheckDeath(MemoryCleaner memoryCleaner, Canvas GameBoard) { }
     }
 }

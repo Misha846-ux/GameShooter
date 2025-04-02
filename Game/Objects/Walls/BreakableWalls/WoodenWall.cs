@@ -26,9 +26,9 @@ namespace Game.Objects.Walls.BreakableWalls
             this.body.Tag = "WoodenWall";
             Canvas.SetLeft(this.body, position.X);
             Canvas.SetTop(this.body, position.Y);
-            this.hitBox = new Rect(position.X, position.Y, body.Width, body.Height);
             GameBoard.Children.Add(this.body);
             this.Health = 100;
+            this.hitBox = new Rect(position.X, position.Y, body.Width, body.Height);
         }
         public void ReduceHealth(int damage)
         {

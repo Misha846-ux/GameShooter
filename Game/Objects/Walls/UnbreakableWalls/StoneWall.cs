@@ -1,5 +1,4 @@
-﻿using Game.Bullets;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +15,7 @@ using System.Windows.Shapes;
 
 namespace Game.Objects.Walls.UnbreakableWalls
 {
-    internal class StoneWall: GameObject
+    internal class StoneWall : GameObject
     {
         public StoneWall(Point position, Canvas GameBoard, List<GameObject> gameObjects)
         {
@@ -29,9 +28,10 @@ namespace Game.Objects.Walls.UnbreakableWalls
             Canvas.SetTop(this.body, position.Y);
             this.hitBox = new Rect(position.X, position.Y, body.Width, body.Height);
             GameBoard.Children.Add(this.body);
+
         }
 
-        public override void CheckDeath(List<GameObject> gameObjects, Canvas GameBoard)
+        public override void CheckDeath(MemoryCleaner memoryCleaner, Canvas GameBoard)
         {
 
         }

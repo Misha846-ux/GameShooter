@@ -37,12 +37,15 @@ namespace Game.Creatures
             BoardWhidth = 500;
             BoardHeight = 800;
 
-            hitBox = new Rect(BoardWhidth, BoardHeight, body.Width, body.Height);
         }
 
         public Rectangle GetBody()
         {
             return this.body;
+        }
+        public Point GetPosition()
+        {
+            return new Point(Canvas.GetLeft(this.body), Canvas.GetTop(this.body));
         }
 
         public void ReduceHealth(int damage)

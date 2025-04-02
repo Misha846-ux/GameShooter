@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Game.Creatures.Enemies;
+using Game.GameSystem;
 
 namespace Game.Objects.Other
 {

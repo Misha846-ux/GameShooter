@@ -10,8 +10,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using System.Windows.Threading;
-
-using Game;
 using Game.Creatures;
 using Game.Creatures.Players;
 using Game.Creatures.Enemies;
@@ -20,6 +18,7 @@ using Game.Objects;
 using Game.Objects.Walls.UnbreakableWalls;
 using Game.Objects.Walls.BreakableWalls;
 using Game.Objects.Other;
+using Game.GameSystem;
 
 namespace Game
 {
@@ -29,6 +28,7 @@ namespace Game
     public partial class MainWindow : Window
     {
         DispatcherTimer timer = new DispatcherTimer();
+        MenuWindow menu;
 
         Player player;
         List<Bullet> bullets;
@@ -62,7 +62,9 @@ namespace Game
                 item.Shot(player.GetBody(), bullets, GameBoard);
                 item.move(player.GetPosition(), GameBoard);
             }
-            memoryCleaner.Clean(bullets, gameObjects, enemies);
+            {
+                memoryCleaner.Clean(bullets, gameObjects, enemies);
+            }
         }
         public MainWindow()
         {
@@ -93,6 +95,7 @@ namespace Game
             enemies = new List<Enemy>();
             gameObjects = new List<GameObject>();
             memoryCleaner = new MemoryCleaner();
+            menu = new MenuWindow(this, Interface, GameBoard, timer);
 
             player = new Player((int)System.Windows.SystemParameters.PrimaryScreenWidth, (int)System.Windows.SystemParameters.PrimaryScreenHeight, GameBoard, Interface);
 
@@ -103,18 +106,17 @@ namespace Game
             new EnemySummoningPoint(new Point(1500, 0), GameBoard, gameObjects);
             new EnemySummoningPoint(new Point(2000, 0), GameBoard, gameObjects);
             WoodenWall woodenWall = new WoodenWall(new Point(200,150), GameBoard, gameObjects);
-
+            
         }
         
         private void OnKeyDown1(object sender, KeyEventArgs e)
         {
             player.KeyDownRead(e);
-            if(e.Key == Key.Escape)
+            if(e.Key == KeysBinds.OpenMenu)
             {
-                this.Close();
+                this.menu.OpenWindow();
             }
         }
-
 
         private void OnKeyUp(object sender, KeyEventArgs e)
         {

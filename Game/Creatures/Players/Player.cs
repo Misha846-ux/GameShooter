@@ -25,6 +25,7 @@ namespace Game.Creatures.Players
         public Point MousePosition {  get; set; }// regarding Canvas
         private Gun gun;
         private Label ammoCounter;
+        public bool Interaction {  get; set; }
         private bool moveUp;
         private bool moveDown;
         private bool moveLeft;
@@ -42,6 +43,7 @@ namespace Game.Creatures.Players
             this.creatureSpeed = 10;
             Canvas.SetLeft(this.body, boardWhidth / 10 * 10);
             Canvas.SetTop(this.body, boardHeight / 10 * 10 );
+            this.Interaction = false;
             this.moveUp = false;
             this.moveDown = false;
             this.moveLeft = false;
@@ -67,44 +69,52 @@ namespace Game.Creatures.Players
 
         public void KeyDownRead(KeyEventArgs e)
         {
-            if (e.Key == Key.W)
+            if (e.Key == KeysBinds.MoveUp)
             {
                 this.moveUp = true;
             }
-            else if (e.Key == Key.S)
+            else if (e.Key == KeysBinds.MoveDown)
             {
                 this.moveDown = true;
             }
-            else if (e.Key == Key.D)
+            else if (e.Key == KeysBinds.MoveRight)
             {
                 this.moveRight = true;
             }
-            else if (e.Key == Key.A)
+            else if (e.Key == KeysBinds.MoveLeft)
             {
                 this.moveLeft = true;
             }
-            else if (e.Key == Key.R)
+            else if (e.Key == KeysBinds.FastReload)
             {
                 this.fastReload = true;
+            }
+            else if (e.Key == KeysBinds.Interaction)
+            {
+                this.Interaction = true;
             }
         }
         public void KeyUpRead(KeyEventArgs e)
         {
-            if (e.Key == Key.W)
+            if (e.Key == KeysBinds.MoveUp)
             {
                 this.moveUp = false;
             }
-            else if (e.Key == Key.S)
+            else if (e.Key == KeysBinds.MoveDown)
             {
                 this.moveDown = false;
             }
-            else if (e.Key == Key.D)
+            else if (e.Key == KeysBinds.MoveRight)
             {
                 this.moveRight = false;
             }
-            else if (e.Key == Key.A)
+            else if (e.Key == KeysBinds.MoveLeft)
             {
                 this.moveLeft = false;
+            }
+            else if (e.Key == KeysBinds.Interaction)
+            {
+                this.Interaction = false;
             }
         }
         public void ShowInterface(Canvas MyCanvas)
@@ -117,15 +127,16 @@ namespace Game.Creatures.Players
         }
         public void MouseDownRead(MouseButtonEventArgs e)
         {
-            if(e.LeftButton == MouseButtonState.Pressed)
+            if(e.ChangedButton == KeysBinds.Shot)
             {
                 this.shot = true;
             }
+            
         }
 
         public void MouseUpRead(MouseButtonEventArgs e)
         {
-            if(e.LeftButton == MouseButtonState.Released)
+            if(e.ChangedButton == KeysBinds.Shot)
             {
                 this.shot = false;
             }

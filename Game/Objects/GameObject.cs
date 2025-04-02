@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using Game.GameSystem;
+
 namespace Game.Objects
 {
     internal abstract class GameObject

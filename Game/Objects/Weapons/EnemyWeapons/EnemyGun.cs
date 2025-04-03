@@ -16,13 +16,14 @@ using Game.Creatures.Players;
 using Game.Bullets;
 using System.Windows.Automation.Text;
 using Game.Objects.Weapons;
+using Game.Bullets.PlayerBullets;
+using Game.Bullets.EnemyBullets;
 
-namespace Game.Objects.Weapons.PlayerWeapons
+namespace Game.Objects.Weapons.EnemyWeapons
 {
-    internal class TestGun : Gun
+    class EnemyGun : Gun
     {
-
-        public TestGun()
+        public EnemyGun()
         {
             rateOfFireTime = 20;
             rateOfFireTimer = rateOfFireTime;
@@ -31,11 +32,12 @@ namespace Game.Objects.Weapons.PlayerWeapons
             maxAmmo = 10;
             ammo = maxAmmo;
         }
-        public override void Shot(Point mousePosition, List<Bullet> bullets, Canvas MyCanvas)
+        public override void Shot(Point mousePosition, List<PlayerOrdinaryBullet> bullets, Canvas MyCanvas) { }
+        public override void Shot(Point mousePosition, List<EnemOrdinaryBullet> bullets, Canvas MyCanvas) 
         {
             if (CheckIfFirePossible())
             {
-                Bullet newBullet = new Bullet(PlayerPosition, mousePosition, bullets);
+                EnemOrdinaryBullet newBullet = new EnemOrdinaryBullet(PlayerPosition, mousePosition, 5, bullets);
                 MyCanvas.Children.Add(newBullet.GetBullet());
             }
         }

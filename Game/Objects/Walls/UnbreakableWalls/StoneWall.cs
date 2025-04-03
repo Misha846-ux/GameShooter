@@ -16,7 +16,7 @@ using Game.GameSystem;
 
 namespace Game.Objects.Walls.UnbreakableWalls
 {
-    internal class StoneWall: GameObject
+    internal class StoneWall : GameObject, Wall
     {
         public StoneWall(Point position, Canvas GameBoard, List<GameObject> gameObjects)
         {

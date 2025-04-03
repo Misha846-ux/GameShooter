@@ -17,7 +17,7 @@ using Game.GameSystem;
 
 namespace Game.Objects.Other
 {
-    internal class EnemySummoningPoint: GameObject
+    internal class EnemySummoningPoint : GameObject
     {
         private readonly int _summonTime;
         private int _summonTimer;
@@ -37,7 +37,7 @@ namespace Game.Objects.Other
 
         public void SummonEnemy(Canvas GameBoard, List<Enemy> enemies)
         {
-            if(this._summonTimer >= this._summonTime)
+            if (this._summonTimer >= this._summonTime)
             {
                 Enemy newEnemy = new Enemy(this._spawnPosition, GameBoard, enemies);
                 this._summonTimer = 0;

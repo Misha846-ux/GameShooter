@@ -17,6 +17,7 @@ using Game.Bullets;
 using Game.Objects.Weapons;
 using Game.Objects.Weapons.PlayerWeapons;
 using System.Xml.Linq;
+using Game.Bullets.PlayerBullets;
 
 namespace Game.Creatures.Players
 {
@@ -25,6 +26,7 @@ namespace Game.Creatures.Players
         public Point MousePosition {  get; set; }// regarding Canvas
         private Gun gun;
         private Label ammoCounter;
+        private Label healthText;
         public bool Interaction {  get; set; }
         private bool moveUp;
         private bool moveDown;
@@ -50,8 +52,9 @@ namespace Game.Creatures.Players
             this.moveRight = false;
             this.shot = false;
             this.fastReload = false;
+            this.Health = 100;
 
-            gun = new TestGun();
+            gun = new PlayerGun();
             gun.PlayerPosition = new Point(Canvas.GetLeft(this.body), Canvas.GetTop(this.body));
 
             this.ammoCounter = new Label
@@ -62,9 +65,25 @@ namespace Game.Creatures.Players
                 FontWeight = FontWeights.Bold,
                 Foreground = new SolidColorBrush(Colors.White)
             };
+
+            this.healthText = new Label
+            {
+                Name = "HealthText",
+                Content = " ",
+                FontSize = 18,
+                FontWeight = FontWeights.Bold,
+                Foreground = new SolidColorBrush(Colors.White)
+            };
+
             Canvas.SetLeft(this.ammoCounter, 0);
             Canvas.SetTop(this.ammoCounter, 0);
             Interfase.Children.Add(this.ammoCounter);
+
+            Canvas.SetLeft(this.healthText, 0);
+            Canvas.SetTop(this.healthText, 25);
+            Interfase.Children.Add(this.healthText);
+
+            hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), body.Width, body.Height);
         }
 
         public void KeyDownRead(KeyEventArgs e)
@@ -124,6 +143,7 @@ namespace Game.Creatures.Players
                 
             }
             this.ammoCounter.Content = "Ammo: " + gun.Ammo + " / " + gun.MaxAmmo;
+            this.healthText.Content = "Health: " + Health;
         }
         public void MouseDownRead(MouseButtonEventArgs e)
         {
@@ -148,11 +168,13 @@ namespace Game.Creatures.Players
             {
                 Canvas.SetTop(this.body, Canvas.GetTop(this.body) - this.creatureSpeed);
                 Canvas.SetTop(GameBoard, Canvas.GetTop(GameBoard) + this.creatureSpeed);
+                hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), hitBox.Width, hitBox.Height);
             }
             else if (this.moveDown && Canvas.GetTop(this.body)+50 < this.BoardHeight)
             {
                 Canvas.SetTop(this.body, Canvas.GetTop(this.body) + this.creatureSpeed);
                 Canvas.SetTop(GameBoard, Canvas.GetTop(GameBoard) - this.creatureSpeed);
+                hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), hitBox.Width, hitBox.Height);
             }
             if (this.moveRight && Canvas.GetLeft(this.body) + 50 < this.BoardWhidth)
             {
@@ -163,11 +185,15 @@ namespace Game.Creatures.Players
             {
                 Canvas.SetLeft(this.body, Canvas.GetLeft(this.body) - this.creatureSpeed);
                 Canvas.SetLeft(GameBoard, Canvas.GetLeft(GameBoard) + this.creatureSpeed);
+                hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), hitBox.Width, hitBox.Height);
             }
-            gun.PlayerPosition = new Point(Canvas.GetLeft(this.body), Canvas.GetTop(this.body));
+            gun.PlayerPosition.X = Canvas.GetLeft(this.body);
+            gun.PlayerPosition.Y = Canvas.GetTop(this.body);
+            hitBox.X = Canvas.GetLeft(this.body);
+            hitBox.Y = Canvas.GetTop(this.body);
         }
 
-        public void Fire(List<Bullet> bullets, Canvas MyCanvas)
+        public void Fire(List<PlayerOrdinaryBullet> bullets, Canvas MyCanvas)
         {
             if (this.fastReload)
             {
@@ -182,4 +208,5 @@ namespace Game.Creatures.Players
 
         }
     }
+    
 }

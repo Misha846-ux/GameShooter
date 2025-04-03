@@ -16,14 +16,18 @@ using Game.Creatures.Players;
 using Game.Bullets;
 using Game.Objects.Weapons;
 using Game.Objects.Weapons.PlayerWeapons;
+using Game.Bullets.EnemyBullets;
+using Game.Bullets.PlayerBullets;
+using Game.Objects.Weapons.EnemyWeapons;
 
 namespace Game.Creatures.Enemies
 {
     internal class Enemy: Creature
     {
-        private TestGun gun;
+        private EnemyGun gun;
         public Enemy(Point spawnPoint, Canvas MyCanvas, List<Enemy> enemies)
         {
+            this.Health = 50;
             this.body.Fill = new SolidColorBrush(Colors.Blue);
             this.body.Name = "enemy";
             this.creatureSpeed = 10;
@@ -33,11 +37,13 @@ namespace Game.Creatures.Enemies
 
             enemies.Add(this);
 
-            gun = new TestGun();
+            gun = new EnemyGun();
             gun.PlayerPosition = spawnPoint;
+
+            hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), body.Width, body.Height);
         }
 
-        public void Shot(Rectangle player, List<Bullet> bullets, Canvas MyCanvas)
+        public void Shot(Rectangle player, List<EnemOrdinaryBullet> bullets, Canvas MyCanvas)
         {
             gun.GunReload();
             gun.Shot(new Point(Canvas.GetLeft(player), Canvas.GetTop(player)), bullets, MyCanvas);
@@ -49,7 +55,10 @@ namespace Game.Creatures.Enemies
 
             Canvas.SetLeft(this.body, nextPosition.X);
             Canvas.SetTop(this.body, nextPosition.Y);
-            gun.PlayerPosition = GetPosition();
+            gun.PlayerPosition.X = nextPosition.X;
+            gun.PlayerPosition.Y = nextPosition.Y;
+            hitBox.X = nextPosition.X;
+            hitBox.Y = nextPosition.Y;
         }
 
         protected Point CalculatePathToPlayer(Point playerPosition)

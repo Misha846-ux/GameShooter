@@ -20,7 +20,7 @@ namespace Game.Objects
     internal abstract class GameObject
     {
         protected Rectangle body;
-        protected Rect hitBox;
+        public Rect hitBox { get; set; }
         public int Health { get; set; }
 
         public GameObject()
@@ -35,11 +35,11 @@ namespace Game.Objects
 
         public virtual void CheckDeath(MemoryCleaner memoryCleaner, Canvas GameBoard)
         {
-            if(Health <= 0)
+            if (Health <= 0)
             {
                 memoryCleaner.AddObject(this);
                 GameBoard.Children.Remove(this.body);
-                
+
             }
         }
     }

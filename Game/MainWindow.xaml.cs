@@ -19,6 +19,9 @@ using Game.Objects.Walls.UnbreakableWalls;
 using Game.Objects.Walls.BreakableWalls;
 using Game.Objects.Other;
 using Game.GameSystem;
+using Game.Bullets.EnemyBullets;
+using Game.Bullets.PlayerBullets;
+using System;
 
 namespace Game
 {
@@ -31,7 +34,8 @@ namespace Game
         MenuWindow menu;
 
         Player player;
-        List<Bullet> bullets;
+        List<EnemOrdinaryBullet> enemyBullets;
+        List<PlayerOrdinaryBullet> playerBullets;
         List<Enemy> enemies;
         List<GameObject> gameObjects;
         MemoryCleaner memoryCleaner;
@@ -41,10 +45,10 @@ namespace Game
             player.BoardHeight = (int)GameBoard.Height;
             player.ShowInterface(Interface);
             player.PlayerMove(GameBoard);
-            player.Fire(bullets, GameBoard);
+            player.Fire(playerBullets, GameBoard);
             foreach (var item in gameObjects)
             {
-                if(item is WoodenWall)
+                if (item is WoodenWall)
                 {
                     item.CheckDeath(memoryCleaner, GameBoard);
                 }
@@ -53,18 +57,24 @@ namespace Game
                     ((EnemySummoningPoint)item).SummonEnemy(GameBoard, enemies);
                 }
             }
-            foreach (var item in bullets)
-            {
-                item.BulletMove(memoryCleaner, GameBoard);
-            }
             foreach (var item in enemies)
             {
-                item.Shot(player.GetBody(), bullets, GameBoard);
+                item.Shot(player.GetBody(), enemyBullets, GameBoard);
                 item.move(player.GetPosition(), GameBoard);
             }
+            foreach (var item in playerBullets)
             {
-                memoryCleaner.Clean(bullets, gameObjects, enemies);
+                 item.BulletMove(memoryCleaner, GameBoard);
+                 item.CheckCollisionWihtEnemy(enemies, memoryCleaner, GameBoard);
+
+
             }
+            foreach (var item in enemyBullets)
+            {
+                item.BulletMove(memoryCleaner, GameBoard);
+                item.CheckCollisionWihtPlayer(player, memoryCleaner, GameBoard);
+            }
+            memoryCleaner.Clean(playerBullets, enemyBullets, gameObjects, enemies);
         }
         public MainWindow()
         {
@@ -88,10 +98,11 @@ namespace Game
                 backGroundImage.ViewportUnits = BrushMappingMode.RelativeToBoundingBox;
                 GameBoard.Background = backGroundImage;
             }
-            
+
             Interface.Width = System.Windows.SystemParameters.PrimaryScreenWidth;
             Interface.Height = System.Windows.SystemParameters.PrimaryScreenHeight;
-            bullets = new List<Bullet>();
+            playerBullets = new List<PlayerOrdinaryBullet>();
+            enemyBullets = new List<EnemOrdinaryBullet>();
             enemies = new List<Enemy>();
             gameObjects = new List<GameObject>();
             memoryCleaner = new MemoryCleaner();
@@ -101,14 +112,16 @@ namespace Game
 
             GameObject testobject = new StoneWall(new Point(200, 100), GameBoard, gameObjects);
             new EnemySummoningPoint(new Point(0,0), GameBoard, gameObjects);
+            new EnemySummoningPoint(new Point(0, 0), GameBoard, gameObjects);
             new EnemySummoningPoint(new Point(500, 0), GameBoard, gameObjects);
             new EnemySummoningPoint(new Point(1000, 0), GameBoard, gameObjects);
             new EnemySummoningPoint(new Point(1500, 0), GameBoard, gameObjects);
             new EnemySummoningPoint(new Point(2000, 0), GameBoard, gameObjects);
             WoodenWall woodenWall = new WoodenWall(new Point(200,150), GameBoard, gameObjects);
             
+
         }
-        
+
         private void OnKeyDown1(object sender, KeyEventArgs e)
         {
             player.KeyDownRead(e);

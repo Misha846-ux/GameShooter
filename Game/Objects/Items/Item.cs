@@ -14,22 +14,61 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using Game.Creatures.Players;
+using Game.GameSystem;
 
 namespace Game.Objects.Items
 {
     internal abstract class Item: GameObject
     {
         public bool СanRaised {  get; set; }
-        public Item()
+        public Rect hitBox;
+        private Label InteractionLabel;
+        public Item(Point spawnPosition, Canvas gameBoard, List<GameObject> gameObjects): base(spawnPosition, gameBoard, gameObjects)
         {
+
             this.body.Width = 20;
             this.body.Height = 20;
             this.СanRaised = true;
+            this.InteractionLabel = new Label
+            {
+                Tag = "Off",
+                Content = KeysBinds.Interaction + " for interact",
+                FontSize = 18,
+                FontWeight = FontWeights.Bold,
+                Foreground = new SolidColorBrush(Colors.White),
+                Height = 40,
+            };
+            this.hitBox = new Rect(spawnPosition.X - this.body.Width, spawnPosition.Y - this.body.Height, this.body.Width * 3, this.body.Height * 3);
         }
 
-        public void InteractionWithObject(Player player, Canvas gameInterface)
+        public virtual void InteractionWithObject(Player player, Canvas gameBoard, Canvas gameInterface, MemoryCleaner memoryCleaner)
         {
-            
+            if (this.СanRaised && this.hitBox.IntersectsWith(player.hitBox))
+            {
+                Canvas.SetLeft(this.InteractionLabel, gameInterface.Width / 2);
+                Canvas.SetTop(this.InteractionLabel, gameInterface.Height - this.InteractionLabel.Height);
+                if(this.InteractionLabel.Tag == "Off")
+                {
+                    gameInterface.Children.Add(this.InteractionLabel);
+                    this.InteractionLabel.Tag = "On";
+                }
+                if (player.Interaction)
+                {
+                    gameInterface.Children.Remove(this.InteractionLabel);
+                    gameBoard.Children.Remove(this.body);
+                    memoryCleaner.AddObject(this);
+                    player.Interaction = false;
+                    ItemAction(player);
+                }
+            }
+            else if(this.InteractionLabel.Tag == "On")
+            {
+                gameInterface.Children.Remove(this.InteractionLabel);
+                this.InteractionLabel.Tag = "Off";
+            }
+
         }
+
+        protected abstract void ItemAction(Player player);
     }
 }

@@ -22,21 +22,7 @@ namespace Game.Bullets.PlayerBullets
             bullets.Add(this);
             this.bullet.Fill = new SolidColorBrush(Colors.Blue);
         }
-        //public void Death(List<PlayerOrdinaryBullet> gameObjects, Canvas GameBoard)
-        //{
-        //    gameObjects.Remove((PlayerOrdinaryBullet)this);
-        //    GameBoard.Children.Remove(this.bullet);
-        //    //GameBoard.Children.Remove(this.hitBox);
-        //}
-        //public void CheckCollisionWithWall(WoodenWall wall, List<PlayerOrdinaryBullet> gameObjects, Canvas GameBoard)
-        //{
-        //    if (wall.hitBox.IntersectsWith(this.hitBox))
-        //    {
-        //        this.Death(gameObjects, GameBoard);
-        //        GameBoard.Children.Remove(bullet);
-        //        wall.ReduceHealth(this.Damage);
-        //    }
-        //}
+
         public void CheckCollisionWihtEnemy( List<Enemy> gameObjects, MemoryCleaner memoryCleaner, Canvas GameBoard)
         {
             foreach (var item in gameObjects)

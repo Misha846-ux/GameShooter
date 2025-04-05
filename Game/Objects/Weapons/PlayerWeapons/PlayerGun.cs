@@ -29,6 +29,7 @@ namespace Game.Objects.Weapons.PlayerWeapons
             rateOfFireTimer = rateOfFireTime;
             reloadTime = 50;
             reloadTimer = 0;
+            damage = 5;
             maxAmmo = 10;
             ammo = maxAmmo;
         }
@@ -36,7 +37,7 @@ namespace Game.Objects.Weapons.PlayerWeapons
         {
             if (CheckIfFirePossible())
             {
-                PlayerOrdinaryBullet newBullet = new PlayerOrdinaryBullet(PlayerPosition, mousePosition, 5, bullets);
+                PlayerOrdinaryBullet newBullet = new PlayerOrdinaryBullet(PlayerPosition, mousePosition, damage, bullets);
                 MyCanvas.Children.Add(newBullet.GetBullet());
             }
         }

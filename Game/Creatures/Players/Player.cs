@@ -18,15 +18,39 @@ using Game.Objects.Weapons;
 using Game.Objects.Weapons.PlayerWeapons;
 using System.Xml.Linq;
 using Game.Bullets.PlayerBullets;
+using Game.Objects;
+using Game.Objects.Items.WeaponsAsItems;
 
 namespace Game.Creatures.Players
 {
     internal class Player: Creature
     {
+        public class WeaponSlot
+        {
+            public Rectangle Slot { get; set; }
+            public Gun gun { get; set; }
+
+            public WeaponSlot(Point position, Canvas gameInterfase)
+            {
+                Slot = new Rectangle
+                {
+                    Width = 40,
+                    Height = 40,
+                    Fill = new SolidColorBrush(Colors.Gray),
+                    Opacity = 0.80,
+                    Stroke = new SolidColorBrush(Colors.White),
+                    StrokeThickness = 0
+                };
+                Canvas.SetLeft(this.Slot, position.X);
+                Canvas.SetTop(this.Slot, position.Y);
+                gameInterfase.Children.Add(Slot);
+            }
+        }
         public Point MousePosition {  get; set; }// regarding Canvas
-        private Gun gun;
         private Label ammoCounter;
         private Label healthText;
+        private Label interactionLabel;
+        
         public bool Interaction {  get; set; }
         private bool moveUp;
         private bool moveDown;
@@ -34,6 +58,9 @@ namespace Game.Creatures.Players
         private bool moveRight;
         private bool shot;
         private bool fastReload;
+
+        List<WeaponSlot> weapons;
+        private int selectedSlot;
 
         public Player(int boardWhidth, int boardHeight, Canvas GameBoard, Canvas Interfase)
         {
@@ -53,9 +80,17 @@ namespace Game.Creatures.Players
             this.shot = false;
             this.fastReload = false;
             this.Health = 100;
+            hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), body.Width, body.Height);
 
-            gun = new PlayerGun();
-            gun.PlayerPosition = new Point(Canvas.GetLeft(this.body), Canvas.GetTop(this.body));
+            
+            weapons = new List<WeaponSlot>
+            {
+                new WeaponSlot(new Point(0,0), Interfase),
+                new WeaponSlot(new Point(50,0), Interfase),
+                new WeaponSlot(new Point(100, 0), Interfase)
+            };
+
+            this.selectedSlot = 0;
 
             this.ammoCounter = new Label
             {
@@ -69,21 +104,24 @@ namespace Game.Creatures.Players
             this.healthText = new Label
             {
                 Name = "HealthText",
+                Width = 120,
                 Content = " ",
                 FontSize = 18,
                 FontWeight = FontWeights.Bold,
                 Foreground = new SolidColorBrush(Colors.White)
             };
+            
 
-            Canvas.SetLeft(this.ammoCounter, 0);
-            Canvas.SetTop(this.ammoCounter, 0);
+
+
             Interfase.Children.Add(this.ammoCounter);
+            Canvas.SetLeft(this.ammoCounter, 0);
+            Canvas.SetTop(this.ammoCounter, this.weapons[0].Slot.Height);
 
-            Canvas.SetLeft(this.healthText, 0);
-            Canvas.SetTop(this.healthText, 25);
             Interfase.Children.Add(this.healthText);
+            Canvas.SetLeft(this.healthText, Interfase.Width - this.healthText.Width);
+            Canvas.SetTop(this.healthText, 0);
 
-            hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), body.Width, body.Height);
         }
 
         public void KeyDownRead(KeyEventArgs e)
@@ -103,6 +141,18 @@ namespace Game.Creatures.Players
             else if (e.Key == KeysBinds.MoveLeft)
             {
                 this.moveLeft = true;
+            }
+            else if (e.Key == KeysBinds.Slot1)
+            {
+                this.selectedSlot = 0;
+            }
+            else if (e.Key == KeysBinds.Slot2)
+            {
+                this.selectedSlot = 1;
+            }
+            else if (e.Key == KeysBinds.Slot3)
+            {
+                this.selectedSlot = 2;
             }
             else if (e.Key == KeysBinds.FastReload)
             {
@@ -138,12 +188,29 @@ namespace Game.Creatures.Players
         }
         public void ShowInterface(Canvas MyCanvas)
         {
-            if(this.ammoCounter == null)
+            //display of gun
             {
-                
+                if(this.weapons[this.selectedSlot].gun != null)
+                {
+                    this.ammoCounter.Content = "Ammo: " + this.weapons[this.selectedSlot].gun.Ammo + " / " + this.weapons[this.selectedSlot].gun.MaxAmmo;
+                }
+                else
+                {
+                    this.ammoCounter.Content = null;
+                }
             }
-            this.ammoCounter.Content = "Ammo: " + gun.Ammo + " / " + gun.MaxAmmo;
             this.healthText.Content = "Health: " + Health;
+            //Slots
+            {
+                this.weapons[this.selectedSlot].Slot.StrokeThickness = 5;
+                for (int i = 0; i< this.weapons.Count; i++)
+                {
+                    if(i != this.selectedSlot)
+                    {
+                        this.weapons[i].Slot.StrokeThickness = 0;
+                    }
+                }
+            }
         }
         public void MouseDownRead(MouseButtonEventArgs e)
         {
@@ -187,23 +254,47 @@ namespace Game.Creatures.Players
                 Canvas.SetLeft(GameBoard, Canvas.GetLeft(GameBoard) + this.creatureSpeed);
                 hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), hitBox.Width, hitBox.Height);
             }
-            gun.PlayerPosition.X = Canvas.GetLeft(this.body);
-            gun.PlayerPosition.Y = Canvas.GetTop(this.body);
+            if(this.weapons[this.selectedSlot].gun != null)
+            {
+                this.weapons[this.selectedSlot].gun.PlayerPosition.X = Canvas.GetLeft(this.body);
+                this.weapons[this.selectedSlot].gun.PlayerPosition.Y = Canvas.GetTop(this.body);
+            }
             hitBox.X = Canvas.GetLeft(this.body);
             hitBox.Y = Canvas.GetTop(this.body);
         }
 
+        public void SetSelectedSlot(Gun weapon, Canvas gameBoard, List<GameObject> gameObjects)
+        {
+            if (this.weapons[this.selectedSlot].gun == null)
+            {
+                this.weapons[this.selectedSlot].gun = weapon;
+                this.weapons[this.selectedSlot].gun.PlayerPosition = GetPosition();
+            }
+            else
+            {
+                new WeaponAsItem(GetPosition(), gameBoard, gameObjects, this.weapons[this.selectedSlot].gun);
+                this.weapons[this.selectedSlot].gun = weapon;
+                this.weapons[this.selectedSlot].gun.PlayerPosition = GetPosition();
+            }
+        }
+
         public void Fire(List<PlayerOrdinaryBullet> bullets, Canvas MyCanvas)
         {
-            if (this.fastReload)
+            if (this.fastReload &&  this.weapons[this.selectedSlot].gun != null)
             {
-                gun.FastReload();
+                this.weapons[this.selectedSlot].gun.FastReload();
                 this.fastReload = false;
             }
-            gun.GunReload();
-            if (shot)
+            foreach (var item in weapons)
             {
-                gun.Shot(this.MousePosition, bullets, MyCanvas);
+                if(item.gun != null)
+                {
+                    item.gun.GunReload();
+                }
+            }
+            if (shot &&  this.weapons[this.selectedSlot].gun != null)
+            {
+                this.weapons[this.selectedSlot].gun.Shot(this.MousePosition, bullets, MyCanvas);
             }
 
         }

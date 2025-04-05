@@ -17,11 +17,15 @@ using Game.Bullets;
 using Game.Objects;
 using Game.Objects.Walls.UnbreakableWalls;
 using Game.Objects.Walls.BreakableWalls;
+using Game.Objects.Items;
+using Game.Objects.Items.FiniteItems;
+using Game.Objects.Items.WeaponsAsItems;
 using Game.Objects.Other;
 using Game.GameSystem;
 using Game.Bullets.EnemyBullets;
 using Game.Bullets.PlayerBullets;
 using System;
+using Game.Objects.Weapons.PlayerWeapons;
 
 namespace Game
 {
@@ -30,31 +34,40 @@ namespace Game
     /// </summary>
     public partial class MainWindow : Window
     {
-        DispatcherTimer timer = new DispatcherTimer();
-        MenuWindow menu;
+        private DispatcherTimer timer = new DispatcherTimer();
+        private MenuWindow menu;
 
-        Player player;
-        List<EnemOrdinaryBullet> enemyBullets;
-        List<PlayerOrdinaryBullet> playerBullets;
-        List<Enemy> enemies;
-        List<GameObject> gameObjects;
-        MemoryCleaner memoryCleaner;
-        private void GameLoop(object sender, EventArgs e)
+        private Player player;
+        private List<EnemOrdinaryBullet> enemyBullets;
+        private List<PlayerOrdinaryBullet> playerBullets;
+        private List<Enemy> enemies;
+        private List<GameObject> gameObjects;
+        private MemoryCleaner memoryCleaner;
+
+        private int countForGameObjectsList;
+        private async void GameLoop(object sender, EventArgs e)
         {
             player.BoardWhidth = (int)GameBoard.Width;
             player.BoardHeight = (int)GameBoard.Height;
             player.ShowInterface(Interface);
             player.PlayerMove(GameBoard);
             player.Fire(playerBullets, GameBoard);
-            foreach (var item in gameObjects)
             {
-                if (item is WoodenWall)
+                countForGameObjectsList = gameObjects.Count;
+                for (int i = 0; i < countForGameObjectsList; i++)
                 {
-                    item.CheckDeath(memoryCleaner, GameBoard);
-                }
-                else if (item is EnemySummoningPoint)
-                {
-                    ((EnemySummoningPoint)item).SummonEnemy(GameBoard, enemies);
+                    if (gameObjects[i] is Item)
+                    {
+                        ((Item)gameObjects[i]).InteractionWithObject(player, GameBoard, Interface, memoryCleaner);
+                    }
+                    else if (gameObjects[i] is WoodenWall)
+                    {
+                        gameObjects[i].CheckDeath(memoryCleaner, GameBoard);
+                    }
+                    else if (gameObjects[i] is EnemySummoningPoint)
+                    {
+                        ((EnemySummoningPoint)gameObjects[i]).SummonEnemy(GameBoard, enemies);
+                    }
                 }
             }
             foreach (var item in enemies)
@@ -111,15 +124,16 @@ namespace Game
             player = new Player((int)System.Windows.SystemParameters.PrimaryScreenWidth, (int)System.Windows.SystemParameters.PrimaryScreenHeight, GameBoard, Interface);
 
             GameObject testobject = new StoneWall(new Point(200, 100), GameBoard, gameObjects);
-            new EnemySummoningPoint(new Point(0,0), GameBoard, gameObjects);
-            new EnemySummoningPoint(new Point(0, 0), GameBoard, gameObjects);
-            new EnemySummoningPoint(new Point(500, 0), GameBoard, gameObjects);
-            new EnemySummoningPoint(new Point(1000, 0), GameBoard, gameObjects);
-            new EnemySummoningPoint(new Point(1500, 0), GameBoard, gameObjects);
-            new EnemySummoningPoint(new Point(2000, 0), GameBoard, gameObjects);
+            //new EnemySummoningPoint(new Point(0, 0), GameBoard, gameObjects);
+            //new EnemySummoningPoint(new Point(0, 0), GameBoard, gameObjects);
+            //new EnemySummoningPoint(new Point(500, 0), GameBoard, gameObjects);
+            //new EnemySummoningPoint(new Point(1000, 0), GameBoard, gameObjects);
+            //new EnemySummoningPoint(new Point(1500, 0), GameBoard, gameObjects);
+            //new EnemySummoningPoint(new Point(2000, 0), GameBoard, gameObjects);
             WoodenWall woodenWall = new WoodenWall(new Point(200,150), GameBoard, gameObjects);
-            
-
+            new HealingPotion(new Point(200, 200), GameBoard, gameObjects);
+            new WeaponAsItem(new Point(200, 300), GameBoard, gameObjects, new PlayerGun());
+            new WeaponAsItem(new Point(200, 400), GameBoard, gameObjects, new PlayerGun());
         }
 
         private void OnKeyDown1(object sender, KeyEventArgs e)

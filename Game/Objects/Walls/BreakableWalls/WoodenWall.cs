@@ -17,18 +17,14 @@ namespace Game.Objects.Walls.BreakableWalls
 {
     internal class WoodenWall: GameObject, Wall
     {
-        public WoodenWall(Point position, Canvas GameBoard, List<GameObject> gameObjects)
+        public WoodenWall(Point position, Canvas GameBoard, List<GameObject> gameObjects):base(position, GameBoard, gameObjects) 
         {
-            gameObjects.Add(this);
             ImageBrush WoodenWallTexture = new ImageBrush();
             WoodenWallTexture.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Textures/WoodenWall.png"));
             this.body.Fill = WoodenWallTexture;
             this.body.Tag = "WoodenWall";
-            Canvas.SetLeft(this.body, position.X);
-            Canvas.SetTop(this.body, position.Y);
-            GameBoard.Children.Add(this.body);
             this.Health = 100;
-            this.hitBox = new Rect(position.X, position.Y, body.Width, body.Height);
+
         }
         public void ReduceHealth(int damage)
         {

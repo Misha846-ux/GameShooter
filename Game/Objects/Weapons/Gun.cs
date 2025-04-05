@@ -25,6 +25,7 @@ namespace Game.Objects.Weapons
         protected int rateOfFireTimer; // contains a value indicating how much time has passed between shots
         protected int reloadTime;
         protected int reloadTimer;
+        protected int damage;
         protected int maxAmmo; // stores maximum amount of ammo
         protected int ammo; // stores the current number of cartridges
 

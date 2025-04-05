@@ -31,6 +31,9 @@ namespace Game.Creatures.Players
         private static Key BasicMoveRight;
         private static Key BasicFastReload;
         private static Key BasicOpenMenu;
+        private static Key BasicSlot1;
+        private static Key BasicSlot2;
+        private static Key BasicSlot3;
         private static MouseButton BasicShot;
         
         public static Key Interaction {  get; set; }
@@ -40,6 +43,9 @@ namespace Game.Creatures.Players
         public static Key MoveRight { get; set; }
         public static Key FastReload { get; set; }
         public static Key OpenMenu { get; set; }
+        public static Key Slot1 { get; set; }
+        public static Key Slot2 { get; set; }
+        public static Key Slot3 {  get; set; }
         public static MouseButton Shot { get; set; }
 
         private static string keyboardFilePath;
@@ -60,20 +66,15 @@ namespace Game.Creatures.Players
                 BasicMoveRight = Key.D;
                 BasicFastReload = Key.R;
                 BasicOpenMenu = Key.Escape;
+                BasicSlot1 = Key.D1;
+                BasicSlot2 = Key.D2;
+                BasicSlot3 = Key.D3;
                 BasicShot = MouseButton.Left;
             }
-            keyboardBinds = DeserializeKeysBinds<Key>(keyboardFilePath);
-            mouseBinds = DeserializeKeysBinds<MouseButton>(mouseFilePath);
-            {
-                Interaction = keyboardBinds[0];
-                MoveUp = keyboardBinds[1];
-                MoveDown = keyboardBinds[2];
-                MoveLeft = keyboardBinds[3];
-                MoveRight = keyboardBinds[4];
-                FastReload = keyboardBinds[5];
-                OpenMenu = keyboardBinds[6];
-                Shot = mouseBinds[0];
-            }
+            keyboardBinds = new List<Key>();
+            mouseBinds = new List<MouseButton>();
+            RestoreKeyBinds();
+
             
         }
 
@@ -86,6 +87,9 @@ namespace Game.Creatures.Players
             KeysBinds.MoveRight = KeysBinds.BasicMoveRight;
             KeysBinds.FastReload = KeysBinds.BasicFastReload;
             KeysBinds.OpenMenu = KeysBinds.BasicOpenMenu;
+            KeysBinds.Slot1 = KeysBinds.BasicSlot1;
+            KeysBinds.Slot2 = KeysBinds.BasicSlot2;
+            KeysBinds.Slot3 = KeysBinds.BasicSlot3;
             KeysBinds.Shot = KeysBinds.BasicShot;
             KeysBinds.SaveNewKeyBinds();
         }
@@ -96,7 +100,9 @@ namespace Game.Creatures.Players
             KeysBinds.mouseBinds.Clear();
             KeysBinds.keyboardBinds = new List<Key> { 
                 KeysBinds.Interaction, KeysBinds.MoveUp, KeysBinds.MoveDown, 
-                KeysBinds.MoveLeft, KeysBinds.MoveRight, KeysBinds.FastReload, KeysBinds.OpenMenu
+                KeysBinds.MoveLeft, KeysBinds.MoveRight, KeysBinds.FastReload, 
+                KeysBinds.OpenMenu, KeysBinds.Slot1, KeysBinds.Slot2,
+                KeysBinds.Slot3
             };
             KeysBinds.mouseBinds = new List<MouseButton> { KeysBinds.Shot };
 
@@ -118,6 +124,9 @@ namespace Game.Creatures.Players
                 KeysBinds.MoveRight = KeysBinds.keyboardBinds[4];
                 KeysBinds.FastReload = KeysBinds.keyboardBinds[5];
                 KeysBinds.OpenMenu = KeysBinds.keyboardBinds[6];
+                KeysBinds.Slot1 = KeysBinds.keyboardBinds[7];
+                KeysBinds.Slot2 = KeysBinds.keyboardBinds[8];
+                KeysBinds.Slot3 = KeysBinds .keyboardBinds[9];
                 Shot = mouseBinds[0];
             }
         }

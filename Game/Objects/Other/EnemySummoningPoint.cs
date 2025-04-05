@@ -22,14 +22,10 @@ namespace Game.Objects.Other
         private readonly int _summonTime;
         private int _summonTimer;
         private readonly Point _spawnPosition;
-        public EnemySummoningPoint(Point position, Canvas GameBoard, List<GameObject> gameObjects)
+        public EnemySummoningPoint(Point position, Canvas GameBoard, List<GameObject> gameObjects): base(position, GameBoard, gameObjects)
         {
-            gameObjects.Add(this);
+            
             this.body.Fill = new SolidColorBrush(Colors.Gray);
-            Canvas.SetLeft(this.body, position.X);
-            Canvas.SetTop(this.body, position.Y);
-            this.hitBox = new Rect(position.X, position.Y, body.Width, body.Height);
-            GameBoard.Children.Add(this.body);
             this._summonTime = 500;
             this._summonTimer = 500;
             this._spawnPosition = new Point(position.X, position.Y);

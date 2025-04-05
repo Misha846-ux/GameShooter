@@ -20,17 +20,21 @@ namespace Game.Objects
     internal abstract class GameObject
     {
         protected Rectangle body;
-        public Rect hitBox { get; set; }
+        public Rect hitBox;
         public int Health { get; set; }
 
-        public GameObject()
+        public GameObject(Point position, Canvas GameBoard, List<GameObject> gameObjects)
         {
+            gameObjects.Add(this);
             this.body = new Rectangle
             {
                 Height = 50,
                 Width = 50,
             };
-            
+            Canvas.SetLeft(this.body, position.X);
+            Canvas.SetTop(this.body, position.Y);
+            this.hitBox = new Rect(position.X, position.Y, body.Width, body.Height);
+            GameBoard.Children.Add(this.body);
         }
 
         public virtual void CheckDeath(MemoryCleaner memoryCleaner, Canvas GameBoard)

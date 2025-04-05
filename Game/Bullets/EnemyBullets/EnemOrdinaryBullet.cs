@@ -28,21 +28,6 @@ namespace Game.Bullets.EnemyBullets
         {
             bullets.Add(this);
         }
-        public void Death(List<EnemOrdinaryBullet> gameObjects, Canvas GameBoard)
-        {
-            gameObjects.Remove((EnemOrdinaryBullet)this);
-            GameBoard.Children.Remove(this.bullet);
-            //GameBoard.Children.Remove(this.hitBox);
-        }
-        public void CheckCollisionWithWall(WoodenWall wall, List<EnemOrdinaryBullet> gameObjects, Canvas GameBoard)
-        {
-            if (wall.hitBox.IntersectsWith(this.hitBox))
-            {
-                this.Death(gameObjects, GameBoard);
-                GameBoard.Children.Remove(bullet);
-                wall.ReduceHealth(this.Damage);
-            }
-        }
         public void CheckCollisionWihtPlayer(Player player, MemoryCleaner memoryCleaner, Canvas GameBoard)
         {
             if (this.hitBox.IntersectsWith(player.hitBox))

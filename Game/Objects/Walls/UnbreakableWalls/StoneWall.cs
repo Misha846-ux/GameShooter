@@ -18,17 +18,13 @@ namespace Game.Objects.Walls.UnbreakableWalls
 {
     internal class StoneWall : GameObject, Wall
     {
-        public StoneWall(Point position, Canvas GameBoard, List<GameObject> gameObjects)
+        public StoneWall(Point position, Canvas GameBoard, List<GameObject> gameObjects): base(position, GameBoard, gameObjects)
         {
-            gameObjects.Add(this);
             ImageBrush stoneWallTexture = new ImageBrush();
             stoneWallTexture.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Textures/StoneWall.png"));
             this.body.Fill = stoneWallTexture;
             this.body.Tag = "stoneWall";
-            Canvas.SetLeft(this.body, position.X);
-            Canvas.SetTop(this.body, position.Y);
-            this.hitBox = new Rect(position.X, position.Y, body.Width, body.Height);
-            GameBoard.Children.Add(this.body);
+            
 
         }
 

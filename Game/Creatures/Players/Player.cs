@@ -49,7 +49,7 @@ namespace Game.Creatures.Players
         public Point MousePosition {  get; set; }// regarding Canvas
         private Label ammoCounter;
         private Label healthText;
-        private Label interactionLabel;
+        private Label moneyLabel;
         
         public bool Interaction {  get; set; }
         private bool moveUp;
@@ -59,68 +59,104 @@ namespace Game.Creatures.Players
         private bool shot;
         private bool fastReload;
 
-        List<WeaponSlot> weapons;
+        private List<WeaponSlot> weapons;
+        public int Money {  get; set; }
+
         private int selectedSlot;
 
         public Player(int boardWhidth, int boardHeight, Canvas GameBoard, Canvas Interfase)
         {
-            this.body.Fill = new SolidColorBrush(Colors.White);
-            this.body.Name = "player";
-            GameBoard.Children.Add(this.body);
-            this.BoardWhidth = boardWhidth;
-            this.BoardHeight = boardHeight;
-            this.creatureSpeed = 10;
-            Canvas.SetLeft(this.body, boardWhidth / 10 * 10);
-            Canvas.SetTop(this.body, boardHeight / 10 * 10 );
-            this.Interaction = false;
-            this.moveUp = false;
-            this.moveDown = false;
-            this.moveLeft = false;
-            this.moveRight = false;
-            this.shot = false;
-            this.fastReload = false;
-            this.Health = 100;
-            hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), body.Width, body.Height);
-
-            
-            weapons = new List<WeaponSlot>
+            //Player body
             {
+                this.body.Fill = new SolidColorBrush(Colors.White);
+                this.body.Name = "player";
+                GameBoard.Children.Add(this.body);
+                Canvas.SetLeft(this.body, boardWhidth / 10 * 10);
+                Canvas.SetTop(this.body, boardHeight / 10 * 10);
+                hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), body.Width, body.Height);
+            }
+
+            //Player stats
+            {
+                this.creatureSpeed = 10;
+                this.Health = 100;
+                this.Money = 10000;
+            }
+
+            //Map stats
+            {
+                this.BoardWhidth = boardWhidth;
+                this.BoardHeight = boardHeight;
+            }
+
+            //Player control
+            {
+                this.Interaction = false;
+                this.moveUp = false;
+                this.moveDown = false;
+                this.moveLeft = false;
+                this.moveRight = false;
+                this.shot = false;
+                this.fastReload = false;
+            }
+           
+            //Player weapon
+            {
+                weapons = new List<WeaponSlot>
+                {
                 new WeaponSlot(new Point(0,0), Interfase),
                 new WeaponSlot(new Point(50,0), Interfase),
                 new WeaponSlot(new Point(100, 0), Interfase)
-            };
+                };
+                this.selectedSlot = 0;
+                
+            }
 
-            this.selectedSlot = 0;
-
-            this.ammoCounter = new Label
+            //Player Interfase
             {
-                Name = "AmmoCounter",
-                Content = "Ammo: ",
-                FontSize = 18,
-                FontWeight = FontWeights.Bold,
-                Foreground = new SolidColorBrush(Colors.White)
-            };
+                this.ammoCounter = new Label
+                {
+                    Name = "AmmoCounter",
+                    Content = "Ammo: ",
+                    FontSize = 18,
+                    FontWeight = FontWeights.Bold,
+                    Foreground = new SolidColorBrush(Colors.White),
+                    HorizontalContentAlignment = HorizontalAlignment.Left
+                };
+                Interfase.Children.Add(this.ammoCounter);
+                Canvas.SetLeft(this.ammoCounter, 0);
+                Canvas.SetTop(this.ammoCounter, this.weapons[0].Slot.Height);
 
-            this.healthText = new Label
-            {
-                Name = "HealthText",
-                Width = 120,
-                Content = " ",
-                FontSize = 18,
-                FontWeight = FontWeights.Bold,
-                Foreground = new SolidColorBrush(Colors.White)
-            };
+                this.healthText = new Label
+                {
+                    Name = "HealthText",
+                    Height = 30,
+                    Width = 150,
+                    Content = " ",
+                    FontSize = 18,
+                    FontWeight = FontWeights.Bold,
+                    Foreground = new SolidColorBrush(Colors.White),
+                    HorizontalContentAlignment = HorizontalAlignment.Right
+                };
+                Interfase.Children.Add(this.healthText);
+                Canvas.SetLeft(this.healthText, Interfase.Width - this.healthText.Width);
+                Canvas.SetTop(this.healthText, 0);
+
+                this.moneyLabel = new Label
+                {
+                    Name = "MoneyLabel",
+                    Width = 150,
+                    Content = " ",
+                    FontSize = 18,
+                    FontWeight = FontWeights.Bold,
+                    Foreground = new SolidColorBrush(Colors.White),
+                    HorizontalContentAlignment = HorizontalAlignment.Right
+                };
+                Interfase.Children.Add(this.moneyLabel);
+                Canvas.SetLeft(this.moneyLabel, Interfase.Width - this.moneyLabel.Width);
+                Canvas.SetTop(this.moneyLabel, this.healthText.Height);
+            }
             
-
-
-
-            Interfase.Children.Add(this.ammoCounter);
-            Canvas.SetLeft(this.ammoCounter, 0);
-            Canvas.SetTop(this.ammoCounter, this.weapons[0].Slot.Height);
-
-            Interfase.Children.Add(this.healthText);
-            Canvas.SetLeft(this.healthText, Interfase.Width - this.healthText.Width);
-            Canvas.SetTop(this.healthText, 0);
 
         }
 
@@ -186,20 +222,27 @@ namespace Game.Creatures.Players
                 this.Interaction = false;
             }
         }
+        public void MouseDownRead(MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == KeysBinds.Shot)
+            {
+                this.shot = true;
+            }
+
+        }
+        public void MouseUpRead(MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == KeysBinds.Shot)
+            {
+                this.shot = false;
+            }
+        }
+
         public void ShowInterface(Canvas MyCanvas)
         {
-            //display of gun
-            {
-                if(this.weapons[this.selectedSlot].gun != null)
-                {
-                    this.ammoCounter.Content = "Ammo: " + this.weapons[this.selectedSlot].gun.Ammo + " / " + this.weapons[this.selectedSlot].gun.MaxAmmo;
-                }
-                else
-                {
-                    this.ammoCounter.Content = null;
-                }
-            }
+            
             this.healthText.Content = "Health: " + Health;
+            this.moneyLabel.Content = "Money: " + this.Money;
             //Slots
             {
                 this.weapons[this.selectedSlot].Slot.StrokeThickness = 5;
@@ -211,24 +254,20 @@ namespace Game.Creatures.Players
                     }
                 }
             }
-        }
-        public void MouseDownRead(MouseButtonEventArgs e)
-        {
-            if(e.ChangedButton == KeysBinds.Shot)
-            {
-                this.shot = true;
-            }
-            
-        }
 
-        public void MouseUpRead(MouseButtonEventArgs e)
-        {
-            if(e.ChangedButton == KeysBinds.Shot)
+            //display of gun
             {
-                this.shot = false;
+                if (this.weapons[this.selectedSlot].gun != null)
+                {
+                    this.ammoCounter.Content = "Ammo: " + this.weapons[this.selectedSlot].gun.Ammo + " / " + this.weapons[this.selectedSlot].gun.MaxAmmo;
+                }
+                else
+                {
+                    this.ammoCounter.Content = null;
+                }
             }
         }
-
+        
         public void PlayerMove(Canvas GameBoard)
         {
             if (this.moveUp && Canvas.GetTop(this.body) > 0)

@@ -24,7 +24,7 @@ namespace Game.Objects.Items.FiniteItems
             this.body.Fill = new SolidColorBrush(Colors.Aqua);
         }
 
-        protected override void ItemAction(Player player)
+        public override void ItemAction(Player player)
         {
             player.Health += 100;
         }

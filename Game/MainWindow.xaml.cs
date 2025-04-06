@@ -26,6 +26,9 @@ using Game.Bullets.EnemyBullets;
 using Game.Bullets.PlayerBullets;
 using System;
 using Game.Objects.Weapons.PlayerWeapons;
+using Game.Objects.Other.Shops.StaticShop;
+using Game.Objects.Other.Shops;
+using Game.Objects.Other.Shops.WeaponShop;
 
 namespace Game
 {
@@ -54,11 +57,15 @@ namespace Game
             player.Fire(playerBullets, GameBoard);
             {
                 countForGameObjectsList = gameObjects.Count;
-                for (int i = 0; i < countForGameObjectsList; i++)
+                for (int i = gameObjects.Count - 1; i >= 0; i--)
                 {
                     if (gameObjects[i] is Item)
                     {
                         ((Item)gameObjects[i]).InteractionWithObject(player, GameBoard, Interface, memoryCleaner);
+                    }
+                    else if (gameObjects[i] is Shop)
+                    {
+                        ((Shop)gameObjects[i]).InteractionWithObject(player, GameBoard, Interface);
                     }
                     else if (gameObjects[i] is WoodenWall)
                     {
@@ -131,9 +138,8 @@ namespace Game
             //new EnemySummoningPoint(new Point(1500, 0), GameBoard, gameObjects);
             //new EnemySummoningPoint(new Point(2000, 0), GameBoard, gameObjects);
             WoodenWall woodenWall = new WoodenWall(new Point(200,150), GameBoard, gameObjects);
-            new HealingPotion(new Point(200, 200), GameBoard, gameObjects);
-            new WeaponAsItem(new Point(200, 300), GameBoard, gameObjects, new PlayerGun());
-            new WeaponAsItem(new Point(200, 400), GameBoard, gameObjects, new PlayerGun());
+            new HealingPotionShop(new Point(400, 150), GameBoard, gameObjects);
+            new WeaponShop(new Point(400, 250), GameBoard, gameObjects);
         }
 
         private void OnKeyDown1(object sender, KeyEventArgs e)

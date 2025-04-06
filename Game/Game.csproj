@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Objects\Other\Shops\StaticShop\" />
     <Folder Include="Objects\Weapons\EnemieWeapons\" />
   </ItemGroup>
 

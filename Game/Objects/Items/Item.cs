@@ -21,8 +21,7 @@ namespace Game.Objects.Items
     internal abstract class Item: GameObject
     {
         public bool СanRaised {  get; set; }
-        public Rect hitBox;
-        private Label InteractionLabel;
+        protected Label InteractionLabel;
         public Item(Point spawnPosition, Canvas gameBoard, List<GameObject> gameObjects): base(spawnPosition, gameBoard, gameObjects)
         {
 
@@ -36,9 +35,14 @@ namespace Game.Objects.Items
                 FontSize = 18,
                 FontWeight = FontWeights.Bold,
                 Foreground = new SolidColorBrush(Colors.White),
+                Background = new SolidColorBrush(Colors.Black),
                 Height = 40,
             };
-            this.hitBox = new Rect(spawnPosition.X - this.body.Width, spawnPosition.Y - this.body.Height, this.body.Width * 3, this.body.Height * 3);
+            this.hitBox.X -= this.body.Width;
+            this.hitBox.Y -= this.body.Height;
+            this.hitBox.Width = this.body.Width * 3;
+            this.hitBox.Height = this.body.Height * 3;
+            
         }
 
         public virtual void InteractionWithObject(Player player, Canvas gameBoard, Canvas gameInterface, MemoryCleaner memoryCleaner)
@@ -66,9 +70,8 @@ namespace Game.Objects.Items
                 gameInterface.Children.Remove(this.InteractionLabel);
                 this.InteractionLabel.Tag = "Off";
             }
-
         }
 
-        protected abstract void ItemAction(Player player);
+        public abstract void ItemAction(Player player);
     }
 }

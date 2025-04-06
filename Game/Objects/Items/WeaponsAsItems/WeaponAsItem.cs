@@ -36,7 +36,7 @@ namespace Game.Objects.Items.WeaponsAsItems
         }
 
 
-        protected override void ItemAction(Player player)
+        public override void ItemAction(Player player)
         {
             player.SetSelectedSlot(this.gun, gameBoard, gameObjects);
         }

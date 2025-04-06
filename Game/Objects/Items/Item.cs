@@ -22,6 +22,7 @@ namespace Game.Objects.Items
     {
         public bool СanRaised {  get; set; }
         protected Label InteractionLabel;
+        protected Rect interactionZone;
         public Item(Point spawnPosition, Canvas gameBoard, List<GameObject> gameObjects): base(spawnPosition, gameBoard, gameObjects)
         {
 
@@ -38,16 +39,15 @@ namespace Game.Objects.Items
                 Background = new SolidColorBrush(Colors.Black),
                 Height = 40,
             };
-            this.hitBox.X -= this.body.Width;
-            this.hitBox.Y -= this.body.Height;
-            this.hitBox.Width = this.body.Width * 3;
-            this.hitBox.Height = this.body.Height * 3;
+            this.hitBox.Width = this.body.Width;
+            this.hitBox.Height = this.body.Height;
             
+            this.interactionZone = new Rect(spawnPosition.X - this.body.Width, spawnPosition.Y - this.body.Height, this.body.Width * 3, this.body.Height * 3);
         }
 
         public virtual void InteractionWithObject(Player player, Canvas gameBoard, Canvas gameInterface, MemoryCleaner memoryCleaner)
         {
-            if (this.СanRaised && this.hitBox.IntersectsWith(player.hitBox))
+            if (this.СanRaised && this.interactionZone.IntersectsWith(player.hitBox))
             {
                 Canvas.SetLeft(this.InteractionLabel, gameInterface.Width / 2);
                 Canvas.SetTop(this.InteractionLabel, gameInterface.Height - this.InteractionLabel.Height);

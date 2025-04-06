@@ -47,40 +47,41 @@ namespace Game
         private List<GameObject> gameObjects;
         private MemoryCleaner memoryCleaner;
 
-        private int countForGameObjectsList;
         private async void GameLoop(object sender, EventArgs e)
         {
             player.BoardWhidth = (int)GameBoard.Width;
             player.BoardHeight = (int)GameBoard.Height;
             player.ShowInterface(Interface);
-            player.PlayerMove(GameBoard);
+            player.PlayerMove(GameBoard, enemies, gameObjects);
             player.Fire(playerBullets, GameBoard);
+            for (int i = gameObjects.Count - 1; i >= 0; i--)
             {
-                countForGameObjectsList = gameObjects.Count;
-                for (int i = gameObjects.Count - 1; i >= 0; i--)
+                if (gameObjects[i] is Item)
                 {
-                    if (gameObjects[i] is Item)
-                    {
-                        ((Item)gameObjects[i]).InteractionWithObject(player, GameBoard, Interface, memoryCleaner);
-                    }
-                    else if (gameObjects[i] is Shop)
-                    {
-                        ((Shop)gameObjects[i]).InteractionWithObject(player, GameBoard, Interface);
-                    }
-                    else if (gameObjects[i] is WoodenWall)
-                    {
-                        gameObjects[i].CheckDeath(memoryCleaner, GameBoard);
-                    }
-                    else if (gameObjects[i] is EnemySummoningPoint)
-                    {
-                        ((EnemySummoningPoint)gameObjects[i]).SummonEnemy(GameBoard, enemies);
-                    }
+                    ((Item)gameObjects[i]).InteractionWithObject(player, GameBoard, Interface, memoryCleaner);
                 }
+                else if (gameObjects[i] is Shop)
+                {
+                    ((Shop)gameObjects[i]).InteractionWithObject(player, GameBoard, Interface);
+                }
+                else if (gameObjects[i] is WoodenWall)
+                {
+                    gameObjects[i].CheckDeath(memoryCleaner, GameBoard);
+                }
+                else if (gameObjects[i] is EnemySummoningPoint)
+                {
+                    ((EnemySummoningPoint)gameObjects[i]).SummonEnemy(GameBoard, enemies);
+                }
+                else if (gameObjects[i] is ResourceDrill)
+                {
+                    ((ResourceDrill)gameObjects[i]).DrillWorking(player);
+                }
+
             }
             foreach (var item in enemies)
             {
                 item.Shot(player.GetBody(), enemyBullets, GameBoard);
-                item.move(player.GetPosition(), GameBoard);
+                item.move(player.GetPosition(), GameBoard, player, enemies, gameObjects);
             }
             foreach (var item in playerBullets)
             {
@@ -131,8 +132,7 @@ namespace Game
             player = new Player((int)System.Windows.SystemParameters.PrimaryScreenWidth, (int)System.Windows.SystemParameters.PrimaryScreenHeight, GameBoard, Interface);
 
             GameObject testobject = new StoneWall(new Point(200, 100), GameBoard, gameObjects);
-            //new EnemySummoningPoint(new Point(0, 0), GameBoard, gameObjects);
-            //new EnemySummoningPoint(new Point(0, 0), GameBoard, gameObjects);
+            new EnemySummoningPoint(new Point(0, 0), GameBoard, gameObjects);
             //new EnemySummoningPoint(new Point(500, 0), GameBoard, gameObjects);
             //new EnemySummoningPoint(new Point(1000, 0), GameBoard, gameObjects);
             //new EnemySummoningPoint(new Point(1500, 0), GameBoard, gameObjects);
@@ -140,6 +140,10 @@ namespace Game
             WoodenWall woodenWall = new WoodenWall(new Point(200,150), GameBoard, gameObjects);
             new HealingPotionShop(new Point(400, 150), GameBoard, gameObjects);
             new WeaponShop(new Point(400, 250), GameBoard, gameObjects);
+            new ResourceDrill(
+                new Point(player.GetPosition().X - (120 - player.GetBody().Width), player.GetPosition().Y + player.GetBody().Height - 400),
+                GameBoard, gameObjects
+            );
         }
 
         private void OnKeyDown1(object sender, KeyEventArgs e)

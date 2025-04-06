@@ -19,6 +19,8 @@ using Game.Objects.Weapons.PlayerWeapons;
 using Game.Bullets.EnemyBullets;
 using Game.Bullets.PlayerBullets;
 using Game.Objects.Weapons.EnemyWeapons;
+using Game.Objects;
+using Game.Objects.Other;
 
 namespace Game.Creatures.Enemies
 {
@@ -49,16 +51,51 @@ namespace Game.Creatures.Enemies
             gun.Shot(new Point(Canvas.GetLeft(player), Canvas.GetTop(player)), bullets, MyCanvas);
         }
 
-        public void move(Point playerPosition, Canvas MyCanvas)
+        public bool CheckForCollision(Player player, List<Enemy> enemies, List<GameObject> gameObjects, Point nextPosition)
         {
-            Point nextPosition = CalculatePathToPlayer(playerPosition);
-
-            Canvas.SetLeft(this.body, nextPosition.X);
-            Canvas.SetTop(this.body, nextPosition.Y);
-            gun.PlayerPosition.X = nextPosition.X;
-            gun.PlayerPosition.Y = nextPosition.Y;
             hitBox.X = nextPosition.X;
             hitBox.Y = nextPosition.Y;
+            if (this.hitBox.IntersectsWith(player.hitBox))
+            {
+                return false;
+            }
+            foreach (var item in enemies)
+            {
+                if (item != this && this.hitBox.IntersectsWith(item.hitBox))
+                {
+                    return false;
+                }
+            }
+            foreach (var item in gameObjects)
+            {
+                if (!(item is EnemySummoningPoint) && this.hitBox.IntersectsWith(item.hitBox))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public void move(Point playerPosition, Canvas MyCanvas, Player player, List<Enemy> enemies, List<GameObject> gameObjects)
+        {
+            Point nextPosition = CalculatePathToPlayer(playerPosition);
+            Point nextXPosition = new Point(nextPosition.X, Canvas.GetTop(this.body));
+            Point nextYPosition = new Point(Canvas.GetLeft(this.body), nextPosition.Y);
+            
+            if(CheckForCollision(player,enemies,gameObjects, nextXPosition))
+            {
+                Canvas.SetLeft(this.body, nextPosition.X);
+            }
+            
+            if(CheckForCollision(player, enemies, gameObjects, nextYPosition))
+            {
+                Canvas.SetTop(this.body, nextPosition.Y);
+            }
+            hitBox.X = nextPosition.X;
+            hitBox.Y = nextPosition.Y;
+
+            gun.PlayerPosition.X = nextPosition.X;
+            gun.PlayerPosition.Y = nextPosition.Y;
         }
 
         protected Point CalculatePathToPlayer(Point playerPosition)

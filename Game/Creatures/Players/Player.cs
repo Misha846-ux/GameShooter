@@ -20,6 +20,10 @@ using System.Xml.Linq;
 using Game.Bullets.PlayerBullets;
 using Game.Objects;
 using Game.Objects.Items.WeaponsAsItems;
+using Game.Creatures.Enemies;
+using Game.Objects.Walls;
+using Game.Objects.Other.Shops;
+using Game.Objects.Items;
 
 namespace Game.Creatures.Players
 {
@@ -73,7 +77,7 @@ namespace Game.Creatures.Players
                 GameBoard.Children.Add(this.body);
                 Canvas.SetLeft(this.body, boardWhidth / 10 * 10);
                 Canvas.SetTop(this.body, boardHeight / 10 * 10);
-                hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), body.Width, body.Height);
+                hitBox = new Rect(Canvas.GetLeft(this.body) + 1, Canvas.GetTop(this.body)+ 1, body.Width-2, body.Height-2);
             }
 
             //Player stats
@@ -268,38 +272,115 @@ namespace Game.Creatures.Players
             }
         }
         
-        public void PlayerMove(Canvas GameBoard)
+        public bool CheckForCollision(List<Enemy> enemies, List<GameObject> gameObjects, string direction)
         {
-            if (this.moveUp && Canvas.GetTop(this.body) > 0)
+            switch (direction)
+            {
+                case "Up":
+                    this.hitBox.Y -= this.creatureSpeed;
+                    foreach (var item in gameObjects)
+                    {
+                        if(this.hitBox.IntersectsWith(item.hitBox))
+                        {
+                            return false;
+                        }
+                    }
+                    foreach (var item in enemies)
+                    {
+                        if (this.hitBox.IntersectsWith(item.hitBox))
+                        {
+                            return false;
+                        }
+                    }
+                    break;
+                case "Down":
+                    this.hitBox.Y += this.creatureSpeed;
+                    foreach (var item in gameObjects)
+                    {
+                        if (this.hitBox.IntersectsWith(item.hitBox))
+                        {
+                            return false;
+                        }
+                    }
+                    foreach (var item in enemies)
+                    {
+                        if (this.hitBox.IntersectsWith(item.hitBox))
+                        {
+                            return false;
+                        }
+                    }
+                    break;
+                case "Left":
+                    this.hitBox.X -= this.creatureSpeed;
+                    foreach (var item in gameObjects)
+                    {
+                        if (this.hitBox.IntersectsWith(item.hitBox))
+                        {
+                            return false;
+                        }
+                    }
+                    foreach (var item in enemies)
+                    {
+                        if (this.hitBox.IntersectsWith(item.hitBox))
+                        {
+                            return false;
+                        }
+                    }
+                    break;
+                case "Right":
+                    this.hitBox.X += this.creatureSpeed;
+                    foreach (var item in gameObjects)
+                    {
+                        if (this.hitBox.IntersectsWith(item.hitBox))
+                        {
+                            return false;
+                        }
+                    }
+                    foreach (var item in enemies)
+                    {
+                        if (this.hitBox.IntersectsWith(item.hitBox))
+                        {
+                            return false;
+                        }
+                    }
+                    break;
+                default: 
+                    break;
+            }
+            return true;
+        }
+
+        public void PlayerMove(Canvas GameBoard, List<Enemy> enemies, List<GameObject> gameObjects)
+        {
+            if (this.moveUp && Canvas.GetTop(this.body) > 0 && CheckForCollision(enemies, gameObjects, "Up"))
             {
                 Canvas.SetTop(this.body, Canvas.GetTop(this.body) - this.creatureSpeed);
                 Canvas.SetTop(GameBoard, Canvas.GetTop(GameBoard) + this.creatureSpeed);
-                hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), hitBox.Width, hitBox.Height);
             }
-            else if (this.moveDown && Canvas.GetTop(this.body)+50 < this.BoardHeight)
+            else if (this.moveDown && Canvas.GetTop(this.body)+50 < this.BoardHeight && CheckForCollision(enemies, gameObjects, "Down"))
             {
                 Canvas.SetTop(this.body, Canvas.GetTop(this.body) + this.creatureSpeed);
                 Canvas.SetTop(GameBoard, Canvas.GetTop(GameBoard) - this.creatureSpeed);
-                hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), hitBox.Width, hitBox.Height);
             }
-            if (this.moveRight && Canvas.GetLeft(this.body) + 50 < this.BoardWhidth)
+            hitBox.X = Canvas.GetLeft(this.body) + 1;
+            hitBox.Y = Canvas.GetTop(this.body) + 1;
+            if (this.moveRight && Canvas.GetLeft(this.body) + 50 < this.BoardWhidth && CheckForCollision(enemies, gameObjects, "Right"))
             {
                 Canvas.SetLeft(this.body, Canvas.GetLeft(this.body) + this.creatureSpeed);
                 Canvas.SetLeft(GameBoard, Canvas.GetLeft(GameBoard) - this.creatureSpeed);
             }
-            else if (this.moveLeft && Canvas.GetLeft(this.body) > 0)
+            else if (this.moveLeft && Canvas.GetLeft(this.body) > 0 && CheckForCollision(enemies, gameObjects, "Left"))
             {
                 Canvas.SetLeft(this.body, Canvas.GetLeft(this.body) - this.creatureSpeed);
                 Canvas.SetLeft(GameBoard, Canvas.GetLeft(GameBoard) + this.creatureSpeed);
-                hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), hitBox.Width, hitBox.Height);
             }
-            if(this.weapons[this.selectedSlot].gun != null)
+            hitBox.X = Canvas.GetLeft(this.body) + 1;
+            hitBox.Y = Canvas.GetTop(this.body) + 1;
+            if (this.weapons[this.selectedSlot].gun != null)
             {
                 this.weapons[this.selectedSlot].gun.PlayerPosition.X = Canvas.GetLeft(this.body);
                 this.weapons[this.selectedSlot].gun.PlayerPosition.Y = Canvas.GetTop(this.body);
             }
-            hitBox.X = Canvas.GetLeft(this.body);
-            hitBox.Y = Canvas.GetTop(this.body);
         }
 
         public void SetSelectedSlot(Gun weapon, Canvas gameBoard, List<GameObject> gameObjects)

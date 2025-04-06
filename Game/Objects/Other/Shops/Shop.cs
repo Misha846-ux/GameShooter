@@ -29,16 +29,15 @@ namespace Game.Objects.Other.Shops
         protected Point position;
         protected Label InteractionLabel;
 
+        protected Rect interactionZone;
+
         protected Item product;
         protected Shop(Point position, Canvas gameBoard, List<GameObject> gameObjects) : base(position, gameBoard, gameObjects)
         {
             this.gameObjects = gameObjects;
             this.gameBoard = gameBoard;
             this.position = position;
-            this.hitBox.X -= this.body.Width;
-            this.hitBox.Y -= this.body.Height;
-            this.hitBox.Width = this.body.Width * 3;
-            this.hitBox.Height = this.body.Height * 3;
+            this.interactionZone = new Rect(position.X - this.body.Width, position.Y - this.body.Height, this.body.Width * 3, this.body.Height * 3);
 
             this.body.Fill = new SolidColorBrush(Colors.Orange);
 
@@ -56,7 +55,7 @@ namespace Game.Objects.Other.Shops
 
         public virtual void InteractionWithObject(Player player, Canvas gameBoard, Canvas gameInterface)
         {
-            if (this.hitBox.IntersectsWith(player.hitBox))
+            if (this.interactionZone.IntersectsWith(player.hitBox))
             {
                 Canvas.SetLeft(this.InteractionLabel, gameInterface.Width / 2);
                 Canvas.SetTop(this.InteractionLabel, gameInterface.Height - this.InteractionLabel.Height);

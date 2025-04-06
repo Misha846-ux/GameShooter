@@ -25,6 +25,7 @@ namespace Game.Objects.Weapons.PlayerWeapons
     {
         public PlayerGun()
         {
+            this.bulletType = typeof(PlayerOrdinaryBullet);
             rateOfFireTime = 20;
             rateOfFireTimer = rateOfFireTime;
             reloadTime = 50;
@@ -33,14 +34,5 @@ namespace Game.Objects.Weapons.PlayerWeapons
             maxAmmo = 10;
             ammo = maxAmmo;
         }
-        public override void Shot(Point mousePosition, List<PlayerOrdinaryBullet> bullets, Canvas MyCanvas)
-        {
-            if (CheckIfFirePossible())
-            {
-                PlayerOrdinaryBullet newBullet = new PlayerOrdinaryBullet(PlayerPosition, mousePosition, damage, bullets);
-                MyCanvas.Children.Add(newBullet.GetBullet());
-            }
-        }
-        public override void Shot(Point mousePosition, List<EnemOrdinaryBullet> bullets, Canvas MyCanvas) { }
     }
 }

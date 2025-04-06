@@ -23,7 +23,7 @@ using System.Xml.Linq;
 
 namespace Game.Bullets
 {
-    internal class Bullet
+    internal abstract class Bullet
     {
         public int Damage { get; set; }
         public Rect hitBox; 
@@ -53,11 +53,11 @@ namespace Game.Bullets
             hitBox = new Rect(Canvas.GetLeft(this.bullet), Canvas.GetTop(this.bullet), bullet.Width, bullet.Height);
         }
         //public Bullet(Point startPosition, Point mousePosition) : this(startPosition, mousePosition, 5) { }
-        public Rectangle GetBullet()
+        public virtual Rectangle GetBullet()
         {
             return this.bullet;
         }
-        public void BulletMove(MemoryCleaner memoryCleaner, Canvas MyCanvas)
+        public virtual void BulletMove(MemoryCleaner memoryCleaner, Canvas MyCanvas)
         {
 
             Point nextPosition = CalculateTrajectory();
@@ -87,7 +87,7 @@ namespace Game.Bullets
             }
         }
 
-        protected Point CalculateTrajectory()
+        protected virtual Point CalculateTrajectory()
         {
             
             double angle = Math.Atan2(this.mousePosition.Y - this.startPosition.Y, this.mousePosition.X - this.startPosition.X);
@@ -103,8 +103,12 @@ namespace Game.Bullets
             return new Point(x, y);
         }
 
-
+        //It is needed so that later it would be easier to create bullets with different effects.
+        //For example, so that it would be easier to add the effect of an explosion or a piercing through.
+        protected virtual void OnBulletHit(GameObject gameObject, MemoryCleaner memoryCleaner, Canvas GameBoard)
+        {
+            
+        }
     }
-    //hitBox = new Rect(nextPosition.X, nextPosition.Y, hitBox.Width, hitBox.Height);
-    //this.CheckCollisionWithWall(wall, gameObjects, MyCanvas);
+    
 }

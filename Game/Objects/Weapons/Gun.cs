@@ -21,6 +21,8 @@ namespace Game.Objects.Weapons
 
     internal abstract class Gun
     {
+        protected Type bulletType;
+
         protected int rateOfFireTime; // contains a value indicating the delay between shots
         protected int rateOfFireTimer; // contains a value indicating how much time has passed between shots
         protected int reloadTime;
@@ -33,11 +35,11 @@ namespace Game.Objects.Weapons
         public int Ammo { get { return ammo; } }
         public Point PlayerPosition;
 
-        public void FastReload()
+        public virtual void FastReload()
         {
             ammo = 0;
         }
-        public void GunReload()
+        public virtual void GunReload()
         {
             if (rateOfFireTimer < reloadTime)
             {
@@ -53,7 +55,7 @@ namespace Game.Objects.Weapons
                 reloadTimer++;
             }
         }
-        public bool CheckIfFirePossible() // gidhfdhjdksh
+        public virtual bool CheckIfFirePossible() // gidhfdhjdksh
         {
             if (ammo > 0)
             {
@@ -75,7 +77,23 @@ namespace Game.Objects.Weapons
 
         }
 
-        public abstract void Shot(Point mousePosition, List<PlayerOrdinaryBullet> bullets, Canvas MyCanvas);
-        public abstract void Shot(Point mousePosition, List<EnemOrdinaryBullet> bullets, Canvas MyCanvas);
+        public virtual void Shot(Point mousePosition, List<PlayerOrdinaryBullet> bullets, Canvas MyCanvas)
+        {
+            if (CheckIfFirePossible())
+            {
+                var constructor = this.bulletType.GetConstructor(new Type[] { typeof(Point), typeof(Point), typeof(int), typeof(List<PlayerOrdinaryBullet>) });
+                Bullet newBullet = constructor.Invoke(new object[] { PlayerPosition, mousePosition, damage, bullets }) as Bullet;
+                MyCanvas.Children.Add(newBullet.GetBullet());
+            }
+        }
+        public virtual void Shot(Point mousePosition, List<EnemyOrdinaryBullet> bullets, Canvas MyCanvas)
+        {
+            if (CheckIfFirePossible())
+            {
+                var constructor = this.bulletType.GetConstructor(new Type[]  { typeof(Point), typeof(Point), typeof(int), typeof(List<EnemyOrdinaryBullet>) });
+                Bullet newBullet = constructor.Invoke(new object[] { PlayerPosition, mousePosition, damage, bullets }) as Bullet;
+                MyCanvas.Children.Add(newBullet.GetBullet());
+            }
+        }
     }
 }

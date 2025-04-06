@@ -41,7 +41,7 @@ namespace Game
         private MenuWindow menu;
 
         private Player player;
-        private List<EnemOrdinaryBullet> enemyBullets;
+        private List<EnemyOrdinaryBullet> enemyBullets;
         private List<PlayerOrdinaryBullet> playerBullets;
         private List<Enemy> enemies;
         private List<GameObject> gameObjects;
@@ -122,7 +122,7 @@ namespace Game
             Interface.Width = System.Windows.SystemParameters.PrimaryScreenWidth;
             Interface.Height = System.Windows.SystemParameters.PrimaryScreenHeight;
             playerBullets = new List<PlayerOrdinaryBullet>();
-            enemyBullets = new List<EnemOrdinaryBullet>();
+            enemyBullets = new List<EnemyOrdinaryBullet>();
             enemies = new List<Enemy>();
             gameObjects = new List<GameObject>();
             memoryCleaner = new MemoryCleaner();

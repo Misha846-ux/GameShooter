@@ -43,7 +43,7 @@ namespace Game.Creatures.Enemies
             hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), body.Width, body.Height);
         }
 
-        public void Shot(Rectangle player, List<EnemOrdinaryBullet> bullets, Canvas MyCanvas)
+        public void Shot(Rectangle player, List<EnemyOrdinaryBullet> bullets, Canvas MyCanvas)
         {
             gun.GunReload();
             gun.Shot(new Point(Canvas.GetLeft(player), Canvas.GetTop(player)), bullets, MyCanvas);

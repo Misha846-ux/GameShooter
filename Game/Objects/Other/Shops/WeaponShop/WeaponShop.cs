@@ -23,23 +23,21 @@ namespace Game.Objects.Other.Shops.WeaponShop
 {
     internal class WeaponShop : Shop
     {
-        private class ProductAndPrice
+        private struct ProductAndPrice
         {
-            public Gun product;
             public Type type;
             public int price;
 
-            public ProductAndPrice(Gun product, Type type, int price)
+            public ProductAndPrice(Type type, int price)
             {
-                this.product = product;
                 this.price = price;
                 this.type = type;
             }
 
-            public void CreateNewProduct()
+            public Gun CreateNewProduct()
             {
                 object obj = Activator.CreateInstance(type);
-                this.product = obj as Gun;
+                return obj as Gun;
             }
 
 
@@ -54,7 +52,7 @@ namespace Game.Objects.Other.Shops.WeaponShop
 
             this.products = new List<ProductAndPrice>
             {
-                new ProductAndPrice(new PlayerGun(), typeof(PlayerGun) , 400)
+                new ProductAndPrice(typeof(PlayerGun) , 400)
             };
 
             CreateNewProduct();
@@ -65,8 +63,7 @@ namespace Game.Objects.Other.Shops.WeaponShop
             this.productNumber = random.Next(0,this.products.Count);
             this.price = this.products[this.productNumber].price;
 
-            this.products[this.productNumber].CreateNewProduct();
-            this.product = new WeaponAsItem(position, gameBoard, gameObjects, this.products[this.productNumber].product);
+            this.product = new WeaponAsItem(position, gameBoard, gameObjects, this.products[this.productNumber].CreateNewProduct());
             
             
             this.product.СanRaised = false;

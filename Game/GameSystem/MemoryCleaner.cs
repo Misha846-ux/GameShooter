@@ -40,13 +40,13 @@ namespace Game.GameSystem
             _memory.Add(obj);
         }
 
-        public void Clean(List<PlayerOrdinaryBullet> playerBullets, List<EnemOrdinaryBullet> enemyBullets, List<GameObject> gameObjects, List<Enemy> enemies)
+        public void Clean(List<PlayerOrdinaryBullet> playerBullets, List<EnemyOrdinaryBullet> enemyBullets, List<GameObject> gameObjects, List<Enemy> enemies)
         {
             foreach (object obj in _memory)
             {
-                if (obj is EnemOrdinaryBullet)
+                if (obj is EnemyOrdinaryBullet)
                 {
-                    enemyBullets.Remove((EnemOrdinaryBullet)obj);
+                    enemyBullets.Remove((EnemyOrdinaryBullet)obj);
                 }
                 else if (obj is PlayerOrdinaryBullet)
                 {

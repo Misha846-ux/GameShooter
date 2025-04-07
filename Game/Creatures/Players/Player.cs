@@ -278,74 +278,32 @@ namespace Game.Creatures.Players
             {
                 case "Up":
                     this.hitBox.Y -= this.creatureSpeed;
-                    foreach (var item in gameObjects)
-                    {
-                        if(this.hitBox.IntersectsWith(item.hitBox))
-                        {
-                            return false;
-                        }
-                    }
-                    foreach (var item in enemies)
-                    {
-                        if (this.hitBox.IntersectsWith(item.hitBox))
-                        {
-                            return false;
-                        }
-                    }
                     break;
                 case "Down":
                     this.hitBox.Y += this.creatureSpeed;
-                    foreach (var item in gameObjects)
-                    {
-                        if (this.hitBox.IntersectsWith(item.hitBox))
-                        {
-                            return false;
-                        }
-                    }
-                    foreach (var item in enemies)
-                    {
-                        if (this.hitBox.IntersectsWith(item.hitBox))
-                        {
-                            return false;
-                        }
-                    }
                     break;
                 case "Left":
                     this.hitBox.X -= this.creatureSpeed;
-                    foreach (var item in gameObjects)
-                    {
-                        if (this.hitBox.IntersectsWith(item.hitBox))
-                        {
-                            return false;
-                        }
-                    }
-                    foreach (var item in enemies)
-                    {
-                        if (this.hitBox.IntersectsWith(item.hitBox))
-                        {
-                            return false;
-                        }
-                    }
                     break;
                 case "Right":
                     this.hitBox.X += this.creatureSpeed;
-                    foreach (var item in gameObjects)
-                    {
-                        if (this.hitBox.IntersectsWith(item.hitBox))
-                        {
-                            return false;
-                        }
-                    }
-                    foreach (var item in enemies)
-                    {
-                        if (this.hitBox.IntersectsWith(item.hitBox))
-                        {
-                            return false;
-                        }
-                    }
                     break;
                 default: 
                     break;
+            }
+            foreach (var item in gameObjects)
+            {
+                if (this.hitBox.IntersectsWith(item.hitBox))
+                {
+                    return false;
+                }
+            }
+            foreach (var item in enemies)
+            {
+                if (this.hitBox.IntersectsWith(item.hitBox))
+                {
+                    return false;
+                }
             }
             return true;
         }

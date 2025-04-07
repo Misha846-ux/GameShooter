@@ -42,7 +42,7 @@ namespace Game.Creatures.Enemies
             gun = new EnemyGun();
             gun.PlayerPosition = spawnPoint;
 
-            hitBox = new Rect(Canvas.GetLeft(this.body), Canvas.GetTop(this.body), body.Width, body.Height);
+            hitBox = new Rect(Canvas.GetLeft(this.body) + 1, Canvas.GetTop(this.body) + 1, body.Width - 2, body.Height - 2);
         }
 
         public void Shot(Rectangle player, List<EnemyOrdinaryBullet> bullets, Canvas MyCanvas)
@@ -53,8 +53,8 @@ namespace Game.Creatures.Enemies
 
         public bool CheckForCollision(Player player, List<Enemy> enemies, List<GameObject> gameObjects, Point nextPosition)
         {
-            hitBox.X = nextPosition.X;
-            hitBox.Y = nextPosition.Y;
+            hitBox.X = nextPosition.X + 1;
+            hitBox.Y = nextPosition.Y + 1;
             if (this.hitBox.IntersectsWith(player.hitBox))
             {
                 return false;
@@ -79,23 +79,23 @@ namespace Game.Creatures.Enemies
         public void move(Point playerPosition, Canvas MyCanvas, Player player, List<Enemy> enemies, List<GameObject> gameObjects)
         {
             Point nextPosition = CalculatePathToPlayer(playerPosition);
-            Point nextXPosition = new Point(nextPosition.X, Canvas.GetTop(this.body));
-            Point nextYPosition = new Point(Canvas.GetLeft(this.body), nextPosition.Y);
             
-            if(CheckForCollision(player,enemies,gameObjects, nextXPosition))
+            
+            Point nextXPosition = new Point(nextPosition.X, Canvas.GetTop(this.body));
+            if (CheckForCollision(player,enemies,gameObjects, nextXPosition))
             {
                 Canvas.SetLeft(this.body, nextPosition.X);
             }
-            
-            if(CheckForCollision(player, enemies, gameObjects, nextYPosition))
+            Point nextYPosition = new Point(Canvas.GetLeft(this.body), nextPosition.Y);
+            if (CheckForCollision(player, enemies, gameObjects, nextYPosition))
             {
                 Canvas.SetTop(this.body, nextPosition.Y);
             }
-            hitBox.X = nextPosition.X;
-            hitBox.Y = nextPosition.Y;
+            hitBox.X = Canvas.GetLeft(this.body) + 1;
+            hitBox.Y = Canvas.GetTop(this.body) + 1;
 
-            gun.PlayerPosition.X = nextPosition.X;
-            gun.PlayerPosition.Y = nextPosition.Y;
+            gun.PlayerPosition.X = Canvas.GetLeft(this.body);
+            gun.PlayerPosition.Y = Canvas.GetTop(this.body);
         }
 
         protected Point CalculatePathToPlayer(Point playerPosition)

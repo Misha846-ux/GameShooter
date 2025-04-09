@@ -21,6 +21,7 @@ using Game.Objects.Walls.BreakableWalls;
 using Game.GameSystem;
 using Game.Creatures.Enemies;
 using Game.Objects.Walls;
+using Game.Objects.Walls.UnbreakableWalls;
 
 namespace Game.Bullets.EnemyBullets
 {
@@ -45,6 +46,14 @@ namespace Game.Bullets.EnemyBullets
                     {
                         item.Health -= this.Damage;
                         item.CheckDeath(memoryCleaner, GameBoard);
+                        memoryCleaner.AddObject(this);
+                        GameBoard.Children.Remove(this.bullet);
+                    }
+                }
+                else if (item is StoneWall)
+                {
+                    if (this.hitBox.IntersectsWith(item.hitBox))
+                    {
                         memoryCleaner.AddObject(this);
                         GameBoard.Children.Remove(this.bullet);
                     }

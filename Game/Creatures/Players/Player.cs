@@ -24,6 +24,8 @@ using Game.Creatures.Enemies;
 using Game.Objects.Walls;
 using Game.Objects.Other.Shops;
 using Game.Objects.Items;
+using System.Numerics;
+using Game.GameSystem;
 
 namespace Game.Creatures.Players
 {
@@ -54,6 +56,8 @@ namespace Game.Creatures.Players
         private Label ammoCounter;
         private Label healthText;
         private Label moneyLabel;
+
+        public Window window; // to close the window in PlayerDeath
         
         public bool Interaction {  get; set; }
         private bool moveUp;
@@ -68,8 +72,10 @@ namespace Game.Creatures.Players
 
         private int selectedSlot;
 
-        public Player(int boardWhidth, int boardHeight, Canvas GameBoard, Canvas Interfase)
+        public Player(int boardWhidth, int boardHeight, Canvas GameBoard, Canvas Interfase, Window window)
         {
+            this.window = window;
+
             //Player body
             {
                 this.body.Fill = new SolidColorBrush(Colors.White);
@@ -242,9 +248,12 @@ namespace Game.Creatures.Players
             }
         }
 
-        public void ShowInterface(Canvas MyCanvas)
+        public void ShowInterface(Canvas MyCanvas, Window window)
         {
-            
+            //if (Health <= 0)
+            //{
+            //    window.Close();
+            //}
             this.healthText.Content = "Health: " + Health;
             this.moneyLabel.Content = "Money: " + this.Money;
             //Slots
@@ -376,6 +385,7 @@ namespace Game.Creatures.Players
             }
 
         }
+
     }
     
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Game.GameSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,9 +27,9 @@ namespace Game.Objects.Walls.BreakableWalls
             this.Health = 100;
 
         }
-        public void ReduceHealth(int damage)
+        public void ReduceHealth(int damage, MemoryCleaner memoryCleaner, Canvas GameBoard)
         {
-            Health = Health - damage;
+            Health -= damage;
         }
     }
 }

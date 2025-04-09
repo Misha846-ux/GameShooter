@@ -21,6 +21,7 @@ using Game.Bullets.PlayerBullets;
 using Game.Objects.Weapons.EnemyWeapons;
 using Game.Objects;
 using Game.Objects.Other;
+using Game.GameSystem;
 
 namespace Game.Creatures.Enemies
 {
@@ -109,6 +110,14 @@ namespace Game.Creatures.Enemies
             double y = GetPosition().Y + vY;
 
             return new Point(x, y);
+        }
+        public void CheckDeath(MemoryCleaner memoryCleaner, Canvas GameBoard)
+        {
+            if (Health <= 0)
+            {
+                memoryCleaner.AddObject(this);
+                GameBoard.Children.Remove(this.body);
+            }
         }
     }
 }

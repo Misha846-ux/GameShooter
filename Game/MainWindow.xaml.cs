@@ -39,6 +39,7 @@ namespace Game
     {
         private DispatcherTimer timer = new DispatcherTimer();
         private MenuWindow menu;
+        private PlayerDeathWindow playerMenu;
 
         private Player player;
         private List<EnemyOrdinaryBullet> enemyBullets;
@@ -51,7 +52,11 @@ namespace Game
         {
             player.BoardWhidth = (int)GameBoard.Width;
             player.BoardHeight = (int)GameBoard.Height;
-            player.ShowInterface(Interface);
+            player.ShowInterface(Interface, this); // added this to close the window in ShowInterface
+            if(player.Health <= 0)
+            {
+                playerMenu.OpenWindow();
+            }
             player.PlayerMove(GameBoard, enemies, gameObjects);
             player.Fire(playerBullets, GameBoard);
             for (int i = gameObjects.Count - 1; i >= 0; i--)
@@ -86,14 +91,14 @@ namespace Game
             foreach (var item in playerBullets)
             {
                  item.BulletMove(memoryCleaner, GameBoard);
-                 item.CheckCollisionWihtEnemy(enemies, memoryCleaner, GameBoard);
+                 item.CheckCollision(enemies, memoryCleaner, GameBoard, gameObjects);
 
 
             }
             foreach (var item in enemyBullets)
             {
                 item.BulletMove(memoryCleaner, GameBoard);
-                item.CheckCollisionWihtPlayer(player, memoryCleaner, GameBoard);
+                item.CheckCollision(player, memoryCleaner, GameBoard, gameObjects);
             }
             memoryCleaner.Clean(playerBullets, enemyBullets, gameObjects, enemies);
         }
@@ -128,8 +133,9 @@ namespace Game
             gameObjects = new List<GameObject>();
             memoryCleaner = new MemoryCleaner();
             menu = new MenuWindow(this, Interface, GameBoard, timer);
+            playerMenu = new PlayerDeathWindow(this, Interface, GameBoard, timer);
 
-            player = new Player((int)System.Windows.SystemParameters.PrimaryScreenWidth, (int)System.Windows.SystemParameters.PrimaryScreenHeight, GameBoard, Interface);
+            player = new Player((int)System.Windows.SystemParameters.PrimaryScreenWidth, (int)System.Windows.SystemParameters.PrimaryScreenHeight, GameBoard, Interface, this);
 
             GameObject testobject = new StoneWall(new Point(200, 100), GameBoard, gameObjects);
             new EnemySummoningPoint(new Point(0, 0), GameBoard, gameObjects);

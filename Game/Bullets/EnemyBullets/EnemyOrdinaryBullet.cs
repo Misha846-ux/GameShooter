@@ -20,6 +20,7 @@ using System.Numerics;
 using Game.Objects.Walls.BreakableWalls;
 using Game.GameSystem;
 using Game.Creatures.Enemies;
+using Game.Objects.Walls;
 
 namespace Game.Bullets.EnemyBullets
 {
@@ -29,12 +30,25 @@ namespace Game.Bullets.EnemyBullets
         {
             bullets.Add(this);
         }
-        public void CheckCollisionWihtPlayer(Player player, MemoryCleaner memoryCleaner, Canvas GameBoard)
+        public void CheckCollision(Player player, MemoryCleaner memoryCleaner, Canvas GameBoard, List<GameObject> gameObjects)
         {
             if (this.hitBox.IntersectsWith(player.hitBox))
             {
                 //there is already an empty method in the pool for game objects. When game objects have the ability to take damage, fill this method
                 OnBulletHit(player, memoryCleaner, GameBoard);
+            }
+            foreach (var item in gameObjects)
+            {
+                if (item is WoodenWall)
+                {
+                    if (this.hitBox.IntersectsWith(item.hitBox))
+                    {
+                        item.Health -= this.Damage;
+                        item.CheckDeath(memoryCleaner, GameBoard);
+                        memoryCleaner.AddObject(this);
+                        GameBoard.Children.Remove(this.bullet);
+                    }
+                }
             }
         }
 

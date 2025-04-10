@@ -139,13 +139,21 @@ namespace Game
 
             GameObject testobject = new StoneWall(new Point(200, 100), GameBoard, gameObjects);
             new EnemySummoningPoint(new Point(0, 0), GameBoard, gameObjects);
-            //new EnemySummoningPoint(new Point(500, 0), GameBoard, gameObjects);
-            //new EnemySummoningPoint(new Point(1000, 0), GameBoard, gameObjects);
-            //new EnemySummoningPoint(new Point(1500, 0), GameBoard, gameObjects);
-            //new EnemySummoningPoint(new Point(2000, 0), GameBoard, gameObjects);
-            WoodenWall woodenWall = new WoodenWall(new Point(200,150), GameBoard, gameObjects);
-            new HealingPotionShop(new Point(400, 150), GameBoard, gameObjects);
-            new WeaponShop(new Point(400, 250), GameBoard, gameObjects);
+            new EnemySummoningPoint(new Point(0, 500), GameBoard, gameObjects);
+            new EnemySummoningPoint(new Point(0, 1000), GameBoard, gameObjects);
+            new EnemySummoningPoint(new Point(0, 1500), GameBoard, gameObjects);
+            new WoodenWall(new Point(200,150), GameBoard, gameObjects);
+            new WoodenWall(new Point(200, 200), GameBoard, gameObjects);
+            new WoodenWall(new Point(200, 250), GameBoard, gameObjects);
+            new WoodenWall(new Point(200, 300), GameBoard, gameObjects);
+            new WoodenWall(new Point(200, 350), GameBoard, gameObjects);
+            new WoodenWall(new Point(200, 400), GameBoard, gameObjects);
+            new StoneWall(new Point(200, 500), GameBoard, gameObjects);
+            new StoneWall(new Point(200, 600), GameBoard, gameObjects);
+            new HealingPotionShop(new Point(player.GetPosition().X - 120, player.GetPosition().Y + 100), GameBoard, gameObjects);
+            new HealingPotionShop(new Point(player.GetPosition().X + 120, player.GetPosition().Y + 100), GameBoard, gameObjects);
+            new WeaponShop(new Point(player.GetPosition().X - 120, player.GetPosition().Y), GameBoard, gameObjects);
+            new WeaponShop(new Point(player.GetPosition().X + 120, player.GetPosition().Y), GameBoard, gameObjects);
             new ResourceDrill(
                 new Point(player.GetPosition().X - (120 - player.GetBody().Width), player.GetPosition().Y + player.GetBody().Height - 400),
                 GameBoard, gameObjects

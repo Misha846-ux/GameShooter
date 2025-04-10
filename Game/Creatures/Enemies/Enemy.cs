@@ -22,6 +22,7 @@ using Game.Objects.Weapons.EnemyWeapons;
 using Game.Objects;
 using Game.Objects.Other;
 using Game.GameSystem;
+using Game.Objects.Items;
 
 namespace Game.Creatures.Enemies
 {
@@ -69,7 +70,7 @@ namespace Game.Creatures.Enemies
             }
             foreach (var item in gameObjects)
             {
-                if (!(item is EnemySummoningPoint) && this.hitBox.IntersectsWith(item.hitBox))
+                if (!(item is EnemySummoningPoint) && !(item is Item) && this.hitBox.IntersectsWith(item.hitBox))
                 {
                     return false;
                 }

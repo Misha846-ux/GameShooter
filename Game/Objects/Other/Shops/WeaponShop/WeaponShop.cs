@@ -52,7 +52,8 @@ namespace Game.Objects.Other.Shops.WeaponShop
 
             this.products = new List<ProductAndPrice>
             {
-                new ProductAndPrice(typeof(PlayerGun) , 400)
+                new ProductAndPrice(typeof(PlayerGun) , 100),
+                new ProductAndPrice(typeof(MachineGun), 400)
             };
 
             CreateNewProduct();

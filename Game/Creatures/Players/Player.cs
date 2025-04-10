@@ -119,7 +119,7 @@ namespace Game.Creatures.Players
                 new WeaponSlot(new Point(100, 0), Interfase)
                 };
                 this.selectedSlot = 0;
-                
+                weapons[0].gun = new PlayerGun();
             }
 
             //Player Interfase
@@ -302,7 +302,7 @@ namespace Game.Creatures.Players
             }
             foreach (var item in gameObjects)
             {
-                if (this.hitBox.IntersectsWith(item.hitBox))
+                if (!(item is Item) && this.hitBox.IntersectsWith(item.hitBox))
                 {
                     return false;
                 }

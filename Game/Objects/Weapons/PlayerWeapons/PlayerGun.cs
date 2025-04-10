@@ -30,7 +30,7 @@ namespace Game.Objects.Weapons.PlayerWeapons
             rateOfFireTimer = rateOfFireTime;
             reloadTime = 50;
             reloadTimer = 0;
-            damage = 5;
+            damage = 20;
             maxAmmo = 10;
             ammo = maxAmmo;
         }
